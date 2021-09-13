@@ -1,4 +1,6 @@
+#include "stdafx.h"
 #include "IAlpacaCamV1.h"
+#include "AlpacaCamEndpointsV1.h"
 
 using namespace Alpaca;
 using namespace Alpaca::Camera;
@@ -58,11 +60,41 @@ IAlpacaCamV1::IAlpacaCamV1(unsigned int deviceNum, std::string deviceName)
 	, m_startX(0)
 	, m_startY(0)
 	, m_subExposureDuration(0.0)
-	, m_pImageArrayI16(nullptr)
-	, m_pImageArrayI32(nullptr)
-	, m_pImageArrayF64(nullptr)
-{}	 
+	, m_pImageArray(nullptr)
+{
+	initCamHandlers();
+}	 
 
 IAlpacaCamV1::~IAlpacaCamV1()
 {
+}
+
+void Alpaca::Camera::IAlpacaCamV1::initCamHandlers()
+{
+	try
+	{
+		std::shared_ptr<HTTPRequestHandler> pHandler = nullptr;
+
+		auto listStart = static_cast<unsigned int>(Alpaca::Camera::CamEndpointID::epFirst);
+		auto listEnd   = static_cast<unsigned int>(Alpaca::Camera::CamEndpointID::epLast);
+
+
+		std::ostringstream oss;
+		oss << m_rootEPName << "/" << "camera" << "/" << m_deviceNumber;
+
+		for (auto i = listStart; i < listEnd; i++)
+		{
+			auto id = static_cast<Alpaca::Camera::CamEndpointID>(i);
+			pHandler = Alpaca::Camera::createHandler(id, oss.str());
+
+			if (pHandler)
+			{
+				registerHandler(pHandler->getName(), pHandler);
+			}
+		}
+	}
+	catch (std::exception& err)
+	{
+		throw std::runtime_error("Failed to initialize common endpoints");
+	}
 }

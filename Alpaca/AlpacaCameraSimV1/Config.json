@@ -1,0 +1,9 @@
+{
+	"Server_Config": 
+	{
+		"Certificate_Path": "C:\\Windows\\SysWOW64\\newcert.pem",
+		"Priv_Key_Path": "C:\\Windows\\SysWOW64\\privkey.pem",
+		"DH_Params_Path": "C:\\Users\\xs_br\\source\\repos\\openssl-1.1\\x64\\bin\\dh2048.pem",
+		"Enable_HTTPS": true
+	}
+}

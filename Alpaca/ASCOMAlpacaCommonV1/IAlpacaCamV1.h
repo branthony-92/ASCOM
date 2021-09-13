@@ -27,6 +27,15 @@ namespace Camera {
 		CameraError
 	};
 
+	enum class PulseGuideDirection
+	{
+		Unknown = -1,
+		North,
+		South,
+		East,
+		West,
+	};
+
 class IAlpacaCamV1 : public AlpacaDeviceV1
 {
 	DEVICEPROP(int,		        BayerOffsetX,	       bayerOffsetX)
@@ -84,20 +93,20 @@ class IAlpacaCamV1 : public AlpacaDeviceV1
 	DEVICEPROP(double,			SubExposureDuration,   subExposureDuration)
 
 	// One of each possible image types
-	DEVICEPROP(Image::I16ImagePtr, ImageArrayI16, pImageArrayI16)
-	DEVICEPROP(Image::I32ImagePtr, ImageArrayI32, pImageArrayI32)
-	DEVICEPROP(Image::F64ImagePtr, ImageArrayF64, pImageArrayF64)
+	DEVICEPROP(Image::ImageDataPtr, ImageArray, pImageArray)
 
 public:
 	IAlpacaCamV1(unsigned int deviceNum, std::string deviceName);
 	virtual ~IAlpacaCamV1();
+	void initCamHandlers();
 
 // virtual camera methods
 public:
-	virtual void startExposure() = 0;
+	virtual void startExposure(double duration, bool isLight) = 0;
 	virtual void stopExposure()  = 0;
 	virtual void abortExposure() = 0;
-	virtual void pulseGuide()    = 0;
+	virtual void pulseGuide(PulseGuideDirection direction, int duration) = 0;
+
 };
 
 }

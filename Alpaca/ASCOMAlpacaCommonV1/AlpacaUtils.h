@@ -11,9 +11,10 @@ public:\
 	void set##name(type val) { m_##member_name = val; }
 
 namespace Alpaca {
-	namespace Utils {
+namespace Utils {
 	
-	}
-}
+    
+} // End Utils
+} // End Alpaca
 
 #endif // !ALPACAUTILS_H

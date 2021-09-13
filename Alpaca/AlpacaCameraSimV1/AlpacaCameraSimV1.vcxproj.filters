@@ -17,8 +17,11 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
-    <Filter Include="Source Files\Server">
-      <UniqueIdentifier>{a4fe40f3-28ee-4482-8706-98cc1ec842ac}</UniqueIdentifier>
+    <Filter Include="Header Files\CamSM">
+      <UniqueIdentifier>{a24146bf-27ad-41fe-9774-e72536e131ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CamSM">
+      <UniqueIdentifier>{ca25ac92-c270-4cdd-9bdb-572e7302967e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -28,10 +31,34 @@
     <ClCompile Include="CameraV1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CameraStateMachine.cpp">
+      <Filter>Source Files\CamSM</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraStates.cpp">
+      <Filter>Source Files\CamSM</Filter>
+    </ClCompile>
+    <ClCompile Include="CamEvents.cpp">
+      <Filter>Source Files\CamSM</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraV1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraStateMachine.h">
+      <Filter>Header Files\CamSM</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraStates.h">
+      <Filter>Header Files\CamSM</Filter>
+    </ClInclude>
+    <ClInclude Include="CamEvents.h">
+      <Filter>Header Files\CamSM</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Config.json" />
   </ItemGroup>
 </Project>

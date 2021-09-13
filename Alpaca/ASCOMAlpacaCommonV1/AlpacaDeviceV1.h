@@ -39,7 +39,7 @@ public:
 	DEVICEPROP(unsigned int, DeviceNumber, deviceNumber)
 
 public:
-	AlpacaDeviceV1(const DeviceTypeID type, const unsigned int deviceNum,  const std::string deviceName);
+	AlpacaDeviceV1(DeviceTypeID type, unsigned int deviceNum, std::string deviceName);
 	virtual ~AlpacaDeviceV1();
 
 	virtual std::string action(std::string action, std::string parameters) = 0;

@@ -8,12 +8,15 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AlpacaCameraSimV1", "..\AlpacaCameraSimV1\AlpacaCameraSimV1.vcxproj", "{F5C45B1B-492E-4C11-8964-18C230ACD5F4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{FBAFC328-E79D-48DA-8C4D-D5AD0F50F8CE} = {FBAFC328-E79D-48DA-8C4D-D5AD0F50F8CE}
+		{6F8DB48B-E7C1-4FB7-94F8-6856365FB0D4} = {6F8DB48B-E7C1-4FB7-94F8-6856365FB0D4}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ASCOMAlpacaCommonV1", "..\ASCOMAlpacaCommonV1\ASCOMAlpacaCommonV1.vcxproj", "{FBAFC328-E79D-48DA-8C4D-D5AD0F50F8CE}"
 	ProjectSection(ProjectDependencies) = postProject
 		{444899F3-F3EE-478A-9177-6E31CF42D18D} = {444899F3-F3EE-478A-9177-6E31CF42D18D}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StateMachine", "..\..\..\UtilToolbox\Utils\StateMachine\StateMachine.vcxproj", "{6F8DB48B-E7C1-4FB7-94F8-6856365FB0D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +48,14 @@ Global
 		{FBAFC328-E79D-48DA-8C4D-D5AD0F50F8CE}.Release|x64.Build.0 = Release|x64
 		{FBAFC328-E79D-48DA-8C4D-D5AD0F50F8CE}.Release|x86.ActiveCfg = Release|Win32
 		{FBAFC328-E79D-48DA-8C4D-D5AD0F50F8CE}.Release|x86.Build.0 = Release|Win32
+		{6F8DB48B-E7C1-4FB7-94F8-6856365FB0D4}.Debug|x64.ActiveCfg = Debug|x64
+		{6F8DB48B-E7C1-4FB7-94F8-6856365FB0D4}.Debug|x64.Build.0 = Debug|x64
+		{6F8DB48B-E7C1-4FB7-94F8-6856365FB0D4}.Debug|x86.ActiveCfg = Debug|Win32
+		{6F8DB48B-E7C1-4FB7-94F8-6856365FB0D4}.Debug|x86.Build.0 = Debug|Win32
+		{6F8DB48B-E7C1-4FB7-94F8-6856365FB0D4}.Release|x64.ActiveCfg = Release|x64
+		{6F8DB48B-E7C1-4FB7-94F8-6856365FB0D4}.Release|x64.Build.0 = Release|x64
+		{6F8DB48B-E7C1-4FB7-94F8-6856365FB0D4}.Release|x86.ActiveCfg = Release|Win32
+		{6F8DB48B-E7C1-4FB7-94F8-6856365FB0D4}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

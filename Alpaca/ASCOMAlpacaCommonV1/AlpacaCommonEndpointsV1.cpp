@@ -2,15 +2,12 @@
 #include "AlpacaCommonEndpointsV1.h"
 #include "AlpacaResponseBodiesV1.h"
 #include "AlpacaDeviceV1.h"
-#include "AlpacaUtils.h"
+#include "Helpers.h"
+#include "ErrorCodes.h"
 
 using namespace Alpaca;
 using namespace Alpaca::Common;
 
-const std::string c_paramKeyDeviceType			= "device_type";
-const std::string c_paramKeyDeviceNumber		= "device_number";
-const std::string c_paramKeyClientID			= "ClientID";
-const std::string c_paramKeyClientTransactionID = "ClientTransactionID";
 
 const std::map<CommonEndpointID, std::string> c_epTargetReflections = {
 	{ CommonEndpointID::epAction,           "/action" },
@@ -26,7 +23,7 @@ const std::map<CommonEndpointID, std::string> c_epTargetReflections = {
 	{ CommonEndpointID::epSupportedActions,	"/supportedactions" }
 };
 
-std::shared_ptr<HTTPRequestHandler> createHandler(const CommonEndpointID id, std::string epPrevfix)
+std::shared_ptr<HTTPRequestHandler> Alpaca::Common::createHandler(const CommonEndpointID id, std::string epPrefix)
 {
 	std::shared_ptr<HTTPRequestHandler> pHandler = nullptr;
 
@@ -34,7 +31,7 @@ std::shared_ptr<HTTPRequestHandler> createHandler(const CommonEndpointID id, std
 
 	if (method == c_epTargetReflections.end()) return nullptr;
 
-	std::string fullEndpointString = epPrevfix + method->second;
+	std::string fullEndpointString = epPrefix + method->second;
 
 	switch (id)
 	{
@@ -94,6 +91,14 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Action::handleRequest_Put
 
 	}
 
+	auto deviceNum = extractDeviceNum(target);
+	if (deviceNum < 0)
+	{
+		pResponseBody->setErrorMessage("Invalid Device Type");
+		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
+		return pResponseBody;
+	}
+
 	auto action   = jsonUtils::extractValue<std::string>(requestBody, "Action",     "");
 	auto params   = jsonUtils::extractValue<std::string>(requestBody, "Parameters", "");
 	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, "ClientID", UINT32_MAX);
@@ -128,6 +133,14 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_CommandBlind::handleReque
 
 	}
 
+	auto deviceNum = extractDeviceNum(target);
+	if (deviceNum < 0)
+	{
+		pResponseBody->setErrorMessage("Invalid Device Type");
+		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
+		return pResponseBody;
+	}
+
 	auto cmd = jsonUtils::extractValue<std::string>(requestBody, "Command", "");
 	auto raw    = jsonUtils::extractValue<std::string>(requestBody, "Raw", "");
 	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, "ClientID", UINT32_MAX);
@@ -150,7 +163,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_CommandBool::handleReques
 	{
 
 	}
-	auto pResponseBody = std::make_shared<Bodies::BoolRequestBody>();
+	auto pResponseBody = std::make_shared<Bodies::BoolResponse>();
 
 	// parse the body
 	JSON requestBody = JSON::parse(body);
@@ -158,6 +171,14 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_CommandBool::handleReques
 	if (requestBody.empty())
 	{
 
+	}
+
+	auto deviceNum = extractDeviceNum(target);
+	if (deviceNum < 0)
+	{
+		pResponseBody->setErrorMessage("Invalid Device Type");
+		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
+		return pResponseBody;
 	}
 
 	auto cmd = jsonUtils::extractValue<std::string>(requestBody, "Command", "");
@@ -184,7 +205,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_CommandString::handleRequ
 	{
 
 	}
-	auto pResponseBody = std::make_shared<Bodies::StringRequestBody>();
+	auto pResponseBody = std::make_shared<Bodies::StringResponse>();
 
 	// parse the body
 	JSON requestBody = JSON::parse(body);
@@ -192,6 +213,14 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_CommandString::handleRequ
 	if (requestBody.empty())
 	{
 
+	}
+
+	auto deviceNum = extractDeviceNum(target);
+	if (deviceNum < 0)
+	{
+		pResponseBody->setErrorMessage("Invalid Device Type");
+		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
+		return pResponseBody;
 	}
 
 	auto cmd = jsonUtils::extractValue<std::string>(requestBody, "Command", "");
@@ -226,11 +255,13 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Connected::handleRequest_
 	}
 
 	auto type = queries.extract(c_paramKeyDeviceType);
-	auto deviceNum = queries.extract(c_paramKeyDeviceNumber, -1);
 
+	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
 	{
-		// oops bad val
+		pResponseBody->setErrorMessage("Invalid Device Type");
+		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
+		return pResponseBody;
 	}
 
 	auto clientID = queries.extract(c_paramKeyClientID, -1);
@@ -262,6 +293,14 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Connected::handleRequest_
 
 	}
 
+	auto deviceNum = extractDeviceNum(target);
+	if (deviceNum < 0)
+	{
+		pResponseBody->setErrorMessage("Invalid Device Type");
+		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
+		return pResponseBody;
+	}
+
 	auto connected = jsonUtils::extractValue<bool>(requestBody,   "Connected", false);
 	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, "ClientID", UINT32_MAX);
 	auto clientTransactionID = jsonUtils::extractValue<unsigned int>(requestBody, "ClientTransactionID", UINT32_MAX);
@@ -276,13 +315,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Connected::handleRequest_
 		pResponseBody->setClientTransactionID(++clientTransactionID);
 	}
 	auto type = queries.extract(c_paramKeyDeviceType);
-	auto deviceNum = queries.extract(c_paramKeyDeviceNumber, -1);
-
-	if (deviceNum < 0)
-	{
-		// oops bad val
-	}
-
 
 	pDevice->setConnected(connected);
 
@@ -304,11 +336,13 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Description::handleReques
 	}
 
 	auto type = queries.extract(c_paramKeyDeviceType);
-	auto deviceNum = queries.extract(c_paramKeyDeviceNumber, -1);
 
+	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
 	{
-		// oops bad val
+		pResponseBody->setErrorMessage("Invalid Device Type");
+		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
+		return pResponseBody;
 	}
 
 	auto clientID = queries.extract(c_paramKeyClientID, -1);
@@ -338,11 +372,13 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_DriverInfo::handleRequest
 	}
 
 	auto type = queries.extract(c_paramKeyDeviceType);
-	auto deviceNum = queries.extract(c_paramKeyDeviceNumber, -1);
-
+	
+	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
 	{
-		// oops bad val
+		pResponseBody->setErrorMessage("Invalid Device Type");
+		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
+		return pResponseBody;
 	}
 
 	auto clientID = queries.extract(c_paramKeyClientID, -1);
@@ -372,11 +408,13 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_DriverVersion::handleRequ
 	}
 
 	auto type = queries.extract(c_paramKeyDeviceType);
-	auto deviceNum = queries.extract(c_paramKeyDeviceNumber, -1);
-
+	
+	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
 	{
-		// oops bad val
+		pResponseBody->setErrorMessage("Invalid Device Type");
+		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
+		return pResponseBody;
 	}
 
 	auto clientID = queries.extract(c_paramKeyClientID, -1);
@@ -405,11 +443,13 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_InterfaceVersion::handleR
 	}
 
 	auto type = queries.extract(c_paramKeyDeviceType);
-	auto deviceNum = queries.extract(c_paramKeyDeviceNumber, -1);
-
+	
+	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
 	{
-		// oops bad val
+		pResponseBody->setErrorMessage("Invalid Device Type");
+		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
+		return pResponseBody;
 	}
 
 	auto clientID = queries.extract(c_paramKeyClientID, -1);
@@ -438,11 +478,13 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Name::handleRequest_Get(s
 	}
 
 	auto type = queries.extract(c_paramKeyDeviceType);
-	auto deviceNum = queries.extract(c_paramKeyDeviceNumber, -1);
-
+	
+	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
 	{
-		// oops bad val
+		pResponseBody->setErrorMessage("Invalid Device Type");
+		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
+		return pResponseBody;
 	}
 
 	auto clientID = queries.extract(c_paramKeyClientID, -1);
@@ -472,11 +514,13 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_SupportedActions::handleR
 	}
 	
 	auto type      = queries.extract(c_paramKeyDeviceType);
-	auto deviceNum = queries.extract(c_paramKeyDeviceNumber, -1);
-
+	
+	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
 	{
-		// oops bad val
+		pResponseBody->setErrorMessage("Invalid Device Type");
+		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
+		return pResponseBody;
 	}
 
 	auto clientID = queries.extract(c_paramKeyClientID, -1);

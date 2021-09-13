@@ -1,6 +1,6 @@
+#include "stdafx.h"
 #include "AlpacaDeviceV1.h"
 #include "AlpacaCommonEndpointsV1.h"
-#include "stdafx.h"
 #include <map>
 #include <sstream>
 
@@ -17,16 +17,16 @@ const std::map<AlpacaDeviceV1::DeviceTypeID, std::string> c_deviceTypeIDStrings 
 		{ AlpacaDeviceV1::DeviceTypeID::Telescope,			 "telescope" }
 };
 
-AlpacaDeviceV1::AlpacaDeviceV1(const DeviceTypeID type, const unsigned int deviceNum, const std::string deviceName)
+AlpacaDeviceV1::AlpacaDeviceV1(DeviceTypeID type, unsigned int deviceNum, std::string deviceName)
 	: RESTServerContext(deviceName)
 	, m_name(deviceName)
 	, m_description()
 	, m_driverInfo()
 	, m_connected(false)
 	, m_interfaceVersion(0)
-	, m_driverVersion(0)
+	, m_driverVersion("1.0")
 	, m_supportedActions()
-	, m_rootEPName("/api/v1/")
+	, m_rootEPName("/api/v1")
 	, m_deviceType(type)
 	, m_deviceNumber(deviceNum)
 {
@@ -51,14 +51,14 @@ void AlpacaDeviceV1::initCommonEndpoints()
 		std::ostringstream oss;
 		oss << m_rootEPName << "/" << deviceTypeString << "/" << m_deviceNumber;
 
-		for (auto i = listEnd; i < listEnd; i++)
+		for (auto i = listStart; i < listEnd; i++)
 		{
 			auto id = static_cast<Alpaca::Common::CommonEndpointID>(i);
 			pHandler = Alpaca::Common::createHandler(id, oss.str());
 
 			if (pHandler)
 			{
-				registerHandler(oss.str(), pHandler);
+				registerHandler(pHandler->getName(), pHandler);
 			}
 		}
 	}

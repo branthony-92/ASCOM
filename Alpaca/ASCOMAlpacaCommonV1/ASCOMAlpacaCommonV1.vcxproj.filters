@@ -42,6 +42,18 @@
     <ClInclude Include="AlpacaImage.h">
       <Filter>Header Files\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="AlpacaCamEndpointsV1.h">
+      <Filter>Header Files\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="ErrorCodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AlpacaCamBodiesV1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AlpacaDeviceV1.cpp">
@@ -55,6 +67,15 @@
     </ClCompile>
     <ClCompile Include="IAlpacaCamV1.cpp">
       <Filter>Source Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="AlpacaCamEndpointsV1.cpp">
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="AlpacaCamBodiesV1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Helpers.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

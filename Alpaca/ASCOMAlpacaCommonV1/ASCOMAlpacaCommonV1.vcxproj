@@ -78,10 +78,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>(Platform)\$(Configuration)\</OutDir>
+    <OutDir>$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -120,6 +121,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <AdditionalIncludeDirectories>C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\RESTLib;C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\json-develop\include</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,18 +149,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AlpacaCamBodiesV1.h" />
+    <ClInclude Include="AlpacaCamEndpointsV1.h" />
     <ClInclude Include="AlpacaCommonEndpointsV1.h" />
     <ClInclude Include="AlpacaDeviceV1.h" />
     <ClInclude Include="AlpacaImage.h" />
     <ClInclude Include="AlpacaResponseBodiesV1.h" />
     <ClInclude Include="AlpacaUtils.h" />
+    <ClInclude Include="ErrorCodes.h" />
+    <ClInclude Include="Helpers.h" />
     <ClInclude Include="IAlpacaCamV1.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AlpacaCamBodiesV1.cpp" />
+    <ClCompile Include="AlpacaCamEndpointsV1.cpp" />
     <ClCompile Include="AlpacaCommonEndpointsV1.cpp" />
     <ClCompile Include="AlpacaDeviceV1.cpp" />
     <ClCompile Include="AlpacaResponseBodiesV1.cpp" />
+    <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="IAlpacaCamV1.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
