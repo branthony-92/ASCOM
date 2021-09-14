@@ -20,15 +20,16 @@ const std::map<AlpacaDeviceV1::DeviceTypeID, std::string> c_deviceTypeIDStrings 
 AlpacaDeviceV1::AlpacaDeviceV1(DeviceTypeID type, unsigned int deviceNum, std::string deviceName)
 	: RESTServerContext(deviceName)
 	, m_name(deviceName)
-	, m_description()
-	, m_driverInfo()
+	, m_description("")
+	, m_driverInfo("")
 	, m_connected(false)
-	, m_interfaceVersion(0)
+	, m_interfaceVersion(1)
 	, m_driverVersion("1.0")
 	, m_supportedActions()
 	, m_rootEPName("/api/v1")
 	, m_deviceType(type)
 	, m_deviceNumber(deviceNum)
+	, m_deviceBusy(false)
 {
 	initCommonEndpoints();
 }

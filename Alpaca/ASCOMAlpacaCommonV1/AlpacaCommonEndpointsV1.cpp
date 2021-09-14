@@ -74,21 +74,22 @@ std::shared_ptr<HTTPRequestHandler> Alpaca::Common::createHandler(const CommonEn
 	return pHandler;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Action::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Action::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pDevice = std::dynamic_pointer_cast<AlpacaDeviceV1>(pCtx);
 	if (!pDevice)
 	{
-
+		throw std::exception("No Device Object");
 	}
 	auto pResponseBody = std::make_shared<Bodies::StringResponse>();
 
 	// parse the body
-	JSON requestBody = JSON::parse(body);
-
-	if (requestBody.empty())
+	
+	if (body.empty())
 	{
-
+		pResponseBody->setErrorMessage("No Request Body Provided");
+		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
+		return pResponseBody;
 	}
 
 	auto deviceNum = extractDeviceNum(target);
@@ -99,15 +100,56 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Action::handleRequest_Put
 		return pResponseBody;
 	}
 
-	auto action   = jsonUtils::extractValue<std::string>(requestBody, "Action",     "");
-	auto params   = jsonUtils::extractValue<std::string>(requestBody, "Parameters", "");
-	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, "ClientID", UINT32_MAX);
-	auto clientTransactionID = jsonUtils::extractValue<unsigned int>(requestBody, "ClientTransactionID", UINT32_MAX);
-
-	if (clientTransactionID > 0)
+	if (body.contains(Common::c_paramKeyClientID))
 	{
-		pResponseBody->setClientTransactionID(++clientTransactionID);
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
 	}
+
+	if (body.contains(Common::c_paramKeyClientTransactionID))
+	{
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
+	}
+
+
+	if (!body.contains("Action"))
+	{
+		pResponseBody->setErrorMessage("No Action Provided");
+		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
+		return pResponseBody;
+	}
+	if (!body.contains("Parameters"))
+	{
+		pResponseBody->setErrorMessage("No Parameters Provided");
+		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
+		return pResponseBody;
+	}
+
+	auto action = body.extract("Action");
+
+	auto supportedActions = pDevice->getSupportedActions();
+	bool supported = false;
+
+	for (auto a : supportedActions)
+	{
+		if (action == a)
+		{
+			supported = true;
+			break;
+		}
+	}
+
+	if (!supported)
+	{
+		pResponseBody->setErrorMessage("Action is not supported");
+		pResponseBody->setErrorNumber(ErrorCodes::c_notImplemented);
+		return pResponseBody;
+	}
+
+	auto params = body.extract("Parameters");
 
 	auto ret = pDevice->action(action, params);
 
@@ -116,22 +158,17 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Action::handleRequest_Put
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_CommandBlind::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_CommandBlind::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pDevice = std::dynamic_pointer_cast<AlpacaDeviceV1>(pCtx);
 	if (!pDevice)
 	{
-
+		throw std::exception("No Device Object");
 	}
 	auto pResponseBody = std::make_shared<Bodies::MethodResponse>();
 
 	// parse the body
-	JSON requestBody = JSON::parse(body);
 
-	if (requestBody.empty())
-	{
-
-	}
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -141,22 +178,49 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_CommandBlind::handleReque
 		return pResponseBody;
 	}
 
-	auto cmd = jsonUtils::extractValue<std::string>(requestBody, "Command", "");
-	auto raw    = jsonUtils::extractValue<std::string>(requestBody, "Raw", "");
-	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, "ClientID", UINT32_MAX);
-	auto clientTransactionID = jsonUtils::extractValue<unsigned int>(requestBody, "ClientTransactionID", UINT32_MAX);
-
-	if (clientTransactionID > 0)
+	if (body.empty())
 	{
-		pResponseBody->setClientTransactionID(++clientTransactionID);
+		pResponseBody->setErrorMessage("No Request Body Provided");
+		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
+		return pResponseBody;
 	}
+
+	if (body.contains(Common::c_paramKeyClientID))
+	{
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
+	}
+
+	if (body.contains(Common::c_paramKeyClientTransactionID))
+	{
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
+	}
+
+	if (!body.contains("Command"))
+	{
+		pResponseBody->setErrorMessage("Command Provided");
+		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
+		return pResponseBody;
+	}
+	if (!body.contains("Raw"))
+	{
+		pResponseBody->setErrorMessage("Raw Specification Provided");
+		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
+		return pResponseBody;
+	}
+
+	auto cmd    = body.extract("Command");
+	auto raw	= body.extract("Raw");
 
 	pDevice->commandBlind(cmd, raw);
 
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_CommandBool::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_CommandBool::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pDevice = std::dynamic_pointer_cast<AlpacaDeviceV1>(pCtx);
 	if (!pDevice)
@@ -166,12 +230,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_CommandBool::handleReques
 	auto pResponseBody = std::make_shared<Bodies::BoolResponse>();
 
 	// parse the body
-	JSON requestBody = JSON::parse(body);
-
-	if (requestBody.empty())
-	{
-
-	}
+	
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -181,15 +240,43 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_CommandBool::handleReques
 		return pResponseBody;
 	}
 
-	auto cmd = jsonUtils::extractValue<std::string>(requestBody, "Command", "");
-	auto raw = jsonUtils::extractValue<std::string>(requestBody, "Raw", "");
-	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, "ClientID", UINT32_MAX);
-	auto clientTransactionID = jsonUtils::extractValue<unsigned int>(requestBody, "ClientTransactionID", UINT32_MAX);
-
-	if (clientTransactionID > 0)
+	if (body.empty())
 	{
-		pResponseBody->setClientTransactionID(++clientTransactionID);
+		pResponseBody->setErrorMessage("No Request Body Provided");
+		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
+		return pResponseBody;
 	}
+
+	if (body.contains(Common::c_paramKeyClientID))
+	{
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
+	}
+
+	if (body.contains(Common::c_paramKeyClientTransactionID))
+	{
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
+	}
+
+	if (!body.contains("Command"))
+	{
+		pResponseBody->setErrorMessage("Command Provided");
+		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
+		return pResponseBody;
+	}
+	if (!body.contains("Raw"))
+	{
+		pResponseBody->setErrorMessage("Raw Specification Provided");
+		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
+		return pResponseBody;
+	}
+
+	auto cmd = body.extract("Command");
+	auto raw = body.extract("Raw");
+
 
 	auto ret = pDevice->commandBool(cmd, raw);
 
@@ -198,7 +285,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_CommandBool::handleReques
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_CommandString::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_CommandString::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pDevice = std::dynamic_pointer_cast<AlpacaDeviceV1>(pCtx);
 	if (!pDevice)
@@ -208,13 +295,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_CommandString::handleRequ
 	auto pResponseBody = std::make_shared<Bodies::StringResponse>();
 
 	// parse the body
-	JSON requestBody = JSON::parse(body);
-
-	if (requestBody.empty())
-	{
-
-	}
-
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
 	{
@@ -223,15 +303,43 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_CommandString::handleRequ
 		return pResponseBody;
 	}
 
-	auto cmd = jsonUtils::extractValue<std::string>(requestBody, "Command", "");
-	auto raw = jsonUtils::extractValue<std::string>(requestBody, "Raw", "");
-	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, "ClientID", UINT32_MAX);
-	auto clientTransactionID = jsonUtils::extractValue<unsigned int>(requestBody, "ClientTransactionID", UINT32_MAX);
-
-	if (clientTransactionID > 0)
+	if (body.empty())
 	{
-		pResponseBody->setClientTransactionID(++clientTransactionID);
+		pResponseBody->setErrorMessage("No Request Body Provided");
+		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
+		return pResponseBody;
 	}
+
+	if (body.contains(Common::c_paramKeyClientID))
+	{
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
+	}
+
+	if (body.contains(Common::c_paramKeyClientTransactionID))
+	{
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
+	}
+
+	if (!body.contains("Command"))
+	{
+		pResponseBody->setErrorMessage("Command Provided");
+		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
+		return pResponseBody;
+	}
+	if (!body.contains("Raw"))
+	{
+		pResponseBody->setErrorMessage("Raw Specification Provided");
+		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
+		return pResponseBody;
+	}
+
+	auto cmd = body.extract("Command");
+	auto raw = body.extract("Raw");
+
 
 	auto ret = pDevice->commandString(cmd, raw);
 
@@ -240,7 +348,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_CommandString::handleRequ
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Connected::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Connected::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pDevice = std::dynamic_pointer_cast<AlpacaDeviceV1>(pCtx);
 	if (!pDevice)
@@ -276,7 +384,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Connected::handleRequest_
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Connected::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Connected::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pDevice = std::dynamic_pointer_cast<AlpacaDeviceV1>(pCtx);
 	if (!pDevice)
@@ -286,13 +394,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Connected::handleRequest_
 	auto pResponseBody = std::make_shared<Bodies::MethodResponse>();
 
 	// parse the body
-	JSON requestBody = JSON::parse(body);
-
-	if (requestBody.empty())
-	{
-
-	}
-
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
 	{
@@ -301,27 +402,51 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Connected::handleRequest_
 		return pResponseBody;
 	}
 
-	auto connected = jsonUtils::extractValue<bool>(requestBody,   "Connected", false);
-	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, "ClientID", UINT32_MAX);
-	auto clientTransactionID = jsonUtils::extractValue<unsigned int>(requestBody, "ClientTransactionID", UINT32_MAX);
-
-	if (!(queries.contains(c_paramKeyDeviceType) && queries.contains("c_paramKeyDeviceNumber")))
+	if (body.empty())
 	{
-		// missing queries
+		pResponseBody->setErrorMessage("No Request Body Provided");
+		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
+		return pResponseBody;
 	}
 
-	if (clientTransactionID > 0)
+	if (body.contains(Common::c_paramKeyClientID))
 	{
-		pResponseBody->setClientTransactionID(++clientTransactionID);
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
 	}
-	auto type = queries.extract(c_paramKeyDeviceType);
 
-	pDevice->setConnected(connected);
+	if (body.contains(Common::c_paramKeyClientTransactionID))
+	{
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
+	}
+
+	if (!body.contains("Connected"))
+	{
+		pResponseBody->setErrorMessage("Connection State Not Provided");
+		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
+		return pResponseBody;
+	}
+
+	auto newConnectedStatus = body.extract("Connected", false);
+
+	if (pDevice->getConnected() && !newConnectedStatus)
+	{
+		pDevice->disconnect();
+	}
+	else if (!pDevice->getConnected() && newConnectedStatus)
+	{
+		pDevice->connect();
+	}
+
+	pDevice->setConnected(newConnectedStatus);
 
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Description::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Description::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pDevice = std::dynamic_pointer_cast<AlpacaDeviceV1>(pCtx);
 	if (!pDevice)
@@ -357,7 +482,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Description::handleReques
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_DriverInfo::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_DriverInfo::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pDevice = std::dynamic_pointer_cast<AlpacaDeviceV1>(pCtx);
 	if (!pDevice)
@@ -393,7 +518,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_DriverInfo::handleRequest
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_DriverVersion::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_DriverVersion::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pDevice = std::dynamic_pointer_cast<AlpacaDeviceV1>(pCtx);
 	if (!pDevice)
@@ -428,7 +553,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_DriverVersion::handleRequ
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_InterfaceVersion::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_InterfaceVersion::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pDevice = std::dynamic_pointer_cast<AlpacaDeviceV1>(pCtx);
 	if (!pDevice)
@@ -463,7 +588,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_InterfaceVersion::handleR
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Name::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Name::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pDevice = std::dynamic_pointer_cast<AlpacaDeviceV1>(pCtx);
 	if (!pDevice)
@@ -499,7 +624,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Name::handleRequest_Get(s
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_SupportedActions::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_SupportedActions::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pDevice = std::dynamic_pointer_cast<AlpacaDeviceV1>(pCtx);
 	if (!pDevice)

@@ -34,6 +34,8 @@
     <QtInstall>5.15.2</QtInstall>
     <QtModules>core;widgets;qml;quick</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
+    <QtDeploy>true</QtDeploy>
+    <QMakeExtraArgs>$(QMakeExtraArgs)</QMakeExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>5.15.2</QtInstall>
@@ -60,8 +62,8 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\RESTLib;C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\json-develop\include;C:\Users\xs_br\source\repos\branthony-92\ASCOM\Alpaca\ASCOMAlpacaCommonV1;C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\3rdParty\Boost\Include;C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\StateMachine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <AdditionalIncludeDirectories>C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\RESTLib;C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\json-develop\include;C:\Users\xs_br\source\repos\branthony-92\ASCOM\Alpaca\ASCOMAlpacaCommonV1;C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\3rdParty\Boost\Include;C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\StateMachine;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -78,7 +80,7 @@
       <AdditionalDependencies>C:\Users\xs_br\source\repos\branthony-92\ASCOM\Alpaca\ASCOMAlpacaCommonV1\x64\$(Configuration)\ASCOMAlpacaCommonV1.lib;C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\RESTLib\x64\$(Configuration)\RESTLib.lib;C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\StateMachine\x64\$(Configuration)\StateMachine.lib;C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\3rdParty\Boost\Lib\x64\$(Configuration)\boost_system-vc140-mt.lib;C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\3rdParty\Boost\Lib\x64\$(Configuration)\boost_date_time-vc140-mt.lib;C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\3rdParty\Boost\Lib\x64\$(Configuration)\boost_regex-vc140-mt.lib;C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\3rdParty\Boost\Lib\x64\$(Configuration)\libssl.lib;C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\3rdParty\Boost\Lib\x64\$(Configuration)\libcrypto.lib;C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\3rdParty\Boost\Lib\x64\$(Configuration)\zlib.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;Winhttp.lib;httpapi.lib;bcrypt.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\RESTLib;C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\json-develop\include;C:\Users\xs_br\source\repos\branthony-92\ASCOM\Alpaca\ASCOMAlpacaCommonV1;C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\3rdParty\Boost\Include;C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\StateMachine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\RESTLib;C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\json-develop\include;C:\Users\xs_br\source\repos\branthony-92\ASCOM\Alpaca\ASCOMAlpacaCommonV1;C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\3rdParty\Boost\Include;C:\Users\xs_br\source\repos\branthony-92\UtilToolbox\Utils\StateMachine;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -114,21 +116,37 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CameraSimApp.cpp" />
     <ClCompile Include="CameraStateMachine.cpp" />
     <ClCompile Include="CameraStates.cpp" />
     <ClCompile Include="CameraV1.cpp" />
     <ClCompile Include="CamEvents.cpp" />
+    <ClCompile Include="CamServer.cpp" />
+    <ClCompile Include="DeviceModel.cpp" />
+    <ClCompile Include="DeviceView.cpp" />
+    <ClCompile Include="DlgMainFrame.cpp" />
+    <ClCompile Include="DlgServerSetup.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CameraSimApp.h" />
     <ClInclude Include="CameraStateMachine.h" />
     <ClInclude Include="CameraStates.h" />
     <ClInclude Include="CameraV1.h" />
     <ClInclude Include="CamEvents.h" />
+    <QtMoc Include="DlgMainFrame.h" />
+    <ClInclude Include="CamServer.h" />
+    <QtMoc Include="DlgServerSetup.h" />
+    <ClInclude Include="DeviceModel.h" />
+    <ClInclude Include="DeviceView.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Config.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="DlgMainFrame.ui" />
+    <QtUic Include="DlgServerSetup.ui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

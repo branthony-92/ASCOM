@@ -106,6 +106,10 @@ public:
 	virtual void stopExposure()  = 0;
 	virtual void abortExposure() = 0;
 	virtual void pulseGuide(PulseGuideDirection direction, int duration) = 0;
+	virtual void setupCamera() = 0;
+	virtual void shutdownCamera() = 0;
+	virtual void finishExposure() = 0;
+	virtual void transferImage() = 0;
 
 };
 

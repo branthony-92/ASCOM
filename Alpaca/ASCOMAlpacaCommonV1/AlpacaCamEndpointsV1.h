@@ -85,7 +85,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_BayerOffsetY : public HTTPRequestHandler
@@ -95,7 +95,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_BinX : public HTTPRequestHandler
@@ -105,8 +105,8 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
-	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_BinY : public HTTPRequestHandler
@@ -116,8 +116,8 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
-	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_CameraState : public HTTPRequestHandler
@@ -127,7 +127,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_CameraXSize : public HTTPRequestHandler
@@ -137,7 +137,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_CameraYSize : public HTTPRequestHandler
@@ -147,7 +147,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_CanAbortExposure : public HTTPRequestHandler
@@ -157,7 +157,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_CanAsymmetricBin : public HTTPRequestHandler
@@ -167,7 +167,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_CanFastReadout : public HTTPRequestHandler
@@ -177,7 +177,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_CanGetCoolerPower : public HTTPRequestHandler
@@ -187,7 +187,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_CanPulseGuide : public HTTPRequestHandler
@@ -197,7 +197,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_CanSetCCDTemp : public HTTPRequestHandler
@@ -207,7 +207,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_CanStopExposure : public HTTPRequestHandler
@@ -217,7 +217,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_CCDTemp : public HTTPRequestHandler
@@ -227,7 +227,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_CoolerOn: public HTTPRequestHandler
@@ -237,8 +237,8 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
-	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_CoolerPower : public HTTPRequestHandler
@@ -248,7 +248,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_ElectronsPerADU : public HTTPRequestHandler
@@ -258,7 +258,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_ExposureMax : public HTTPRequestHandler
@@ -268,7 +268,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_ExposureMin : public HTTPRequestHandler
@@ -278,7 +278,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_ExposureResolution : public HTTPRequestHandler
@@ -288,7 +288,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_FastReadout : public HTTPRequestHandler
@@ -298,8 +298,8 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
-	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_FullWellCapacity : public HTTPRequestHandler
@@ -309,7 +309,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_Gain : public HTTPRequestHandler
@@ -319,8 +319,8 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
-	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_GainMax : public HTTPRequestHandler
@@ -330,7 +330,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_GainMin : public HTTPRequestHandler
@@ -340,7 +340,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_Gains : public HTTPRequestHandler
@@ -350,7 +350,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_HasShutter : public HTTPRequestHandler
@@ -360,7 +360,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_HeatSinkTemp : public HTTPRequestHandler
@@ -370,7 +370,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_ImageArray : public HTTPRequestHandler
@@ -380,7 +380,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_ImageArrayVariant : public HTTPRequestHandler
@@ -390,7 +390,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_ImageReady : public HTTPRequestHandler
@@ -400,7 +400,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_IsPulseGuiding : public HTTPRequestHandler
@@ -410,7 +410,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_LastExposureDuration : public HTTPRequestHandler
@@ -420,7 +420,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_LastExposureStartTime : public HTTPRequestHandler
@@ -430,7 +430,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_MaxADU : public HTTPRequestHandler
@@ -440,7 +440,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_MaxBinX : public HTTPRequestHandler
@@ -450,7 +450,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_MaxBinY : public HTTPRequestHandler
@@ -460,7 +460,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_NumX : public HTTPRequestHandler
@@ -470,8 +470,8 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
-	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_NumY : public HTTPRequestHandler
@@ -481,8 +481,8 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
-	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_Offset : public HTTPRequestHandler
@@ -492,8 +492,8 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
-	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_OffsetMax : public HTTPRequestHandler
@@ -503,7 +503,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_OffsetMin : public HTTPRequestHandler
@@ -513,7 +513,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_Offsets : public HTTPRequestHandler
@@ -523,7 +523,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_PercentComplete : public HTTPRequestHandler
@@ -533,7 +533,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_PixelSizeX : public HTTPRequestHandler
@@ -543,7 +543,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_PixelSizeY : public HTTPRequestHandler
@@ -553,7 +553,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_ReadoutMode : public HTTPRequestHandler
@@ -563,8 +563,8 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
-	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_ReadoutModes : public HTTPRequestHandler
@@ -574,7 +574,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_SensorName : public HTTPRequestHandler
@@ -584,7 +584,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_SensorType : public HTTPRequestHandler
@@ -594,7 +594,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_CoolerSetpoint : public HTTPRequestHandler
@@ -604,8 +604,8 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
-	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_StartX : public HTTPRequestHandler
@@ -615,8 +615,8 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
-	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_StartY : public HTTPRequestHandler
@@ -626,8 +626,8 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
-	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_SubExposureDuration : public HTTPRequestHandler
@@ -637,8 +637,8 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
-	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 // methods
@@ -649,7 +649,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_PulseGuide : public HTTPRequestHandler
@@ -659,7 +659,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_StartExposure: public HTTPRequestHandler
@@ -669,7 +669,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 class Endpoint_StopExposure : public HTTPRequestHandler
@@ -679,7 +679,7 @@ public:
 		: HTTPRequestHandler(epString, HTTPRequestHandler::DataType::JSON)
 	{}
 
-	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx) override;
+	std::shared_ptr<JSONInfoBody> handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx) override;
 };
 
 } // End Camera

@@ -21,7 +21,7 @@ const std::map<Camera::CamEndpointID, std::string> c_epTargetReflections = {
 	{ Camera::CamEndpointID::epCanFastReadout,				 "/canfastreadout"        },
 	{ Camera::CamEndpointID::epCanGetCoolerPower,			 "/cangetcoolerpower"     },
 	{ Camera::CamEndpointID::epCanPulseGuide,				 "/canpulseguide"         },
-	{ Camera::CamEndpointID::epCanSetCCDTemp,				 "/cansetccdtemp"         },
+	{ Camera::CamEndpointID::epCanSetCCDTemp,				 "/cansetccdtemperature"  },
 	{ Camera::CamEndpointID::epCanStopExposure,				 "/canstopexposure"       },
 	{ Camera::CamEndpointID::epCCDTemp,						 "/ccdtemperature"        },
 	{ Camera::CamEndpointID::epCoolerOn,					 "/cooleron"              },
@@ -264,7 +264,7 @@ std::shared_ptr<HTTPRequestHandler> Alpaca::Camera::createHandler(const Camera::
 	return pHadler;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BayerOffsetX::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BayerOffsetX::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -295,7 +295,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BayerOffsetX::handleReque
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BayerOffsetY::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BayerOffsetY::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -326,7 +326,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BayerOffsetY::handleReque
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinX::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinX::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -357,7 +357,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinX::handleRequest_Get(s
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinX::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinX::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -375,16 +375,14 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinX::handleRequest_Put(s
 		return pResponseBody;
 	}
 
-	JSON requestBody = JSON::parse(body);
-
-	if (requestBody.empty())
+	if (!body.contains("BinX"))
 	{
 		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
-		pResponseBody->setErrorMessage("No Request Body Supplied");
+		pResponseBody->setErrorMessage("No BinX value Supplied");
 		return pResponseBody;
 	}
 
-	auto binX = jsonUtils::extractValue<int>(requestBody, "BinX", 0);
+	auto binX = body.extract("BinX", 0);
 
 	if (binX <= 0 || binX > pCamera->getMaxBinX())
 	{
@@ -393,11 +391,19 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinX::handleRequest_Put(s
 		return pResponseBody;
 	}
 
-	auto clientID      = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientID,            UINT32_MAX);
-	auto transactionID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientTransactionID, UINT32_MAX);
-	if (transactionID > 0)
+	if (body.contains(Common::c_paramKeyClientID))
 	{
-		pResponseBody->setClientTransactionID(++transactionID);
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
+
+	}
+
+	if (body.contains(Common::c_paramKeyClientTransactionID))
+	{
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
 	}
 
 	pCamera->setBinX(binX);
@@ -406,7 +412,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinX::handleRequest_Put(s
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinY::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinY::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -437,7 +443,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinY::handleRequest_Get(s
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinY::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinY::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -455,29 +461,28 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinY::handleRequest_Put(s
 		return pResponseBody;
 	}
 
-	JSON requestBody = JSON::parse(body);
+	auto binY = body.extract("BinX", 0);
 
-	if (requestBody.empty())
-	{
-		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
-		pResponseBody->setErrorMessage("No Request Body Supplied");
-		return pResponseBody;
-	}
-
-	auto binY = jsonUtils::extractValue<int>(requestBody, "BinY", 0);
-
-	if (binY == 0 || binY > pCamera->getMaxBinY())
+	if (binY <= 0 || binY > pCamera->getMaxBinY())
 	{
 		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
 		pResponseBody->setErrorMessage("Invalid Value Supplied");
 		return pResponseBody;
 	}
 
-	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientID, UINT32_MAX);
-	auto transactionID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientTransactionID, UINT32_MAX);
-	if (transactionID > 0)
+	if (body.contains(Common::c_paramKeyClientID))
 	{
-		pResponseBody->setClientTransactionID(++transactionID);
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
+
+	}
+
+	if (body.contains(Common::c_paramKeyClientTransactionID))
+	{
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
 	}
 
 	pCamera->setBinY(binY);
@@ -486,7 +491,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinY::handleRequest_Put(s
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CameraState::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CameraState::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -519,7 +524,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CameraState::handleReques
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CameraXSize::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CameraXSize::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -550,7 +555,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CameraXSize::handleReques
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CameraYSize::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CameraYSize::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -581,7 +586,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CameraYSize::handleReques
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanAbortExposure::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanAbortExposure::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -612,7 +617,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanAbortExposure::handleR
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanAsymmetricBin::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanAsymmetricBin::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -643,7 +648,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanAsymmetricBin::handleR
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanFastReadout::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanFastReadout::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -674,7 +679,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanFastReadout::handleReq
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanGetCoolerPower::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanGetCoolerPower::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -705,7 +710,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanGetCoolerPower::handle
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanPulseGuide::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanPulseGuide::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -736,7 +741,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanPulseGuide::handleRequ
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanSetCCDTemp::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanSetCCDTemp::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -767,7 +772,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanSetCCDTemp::handleRequ
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanStopExposure::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanStopExposure::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -798,7 +803,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanStopExposure::handleRe
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CCDTemp::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CCDTemp::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -829,7 +834,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CCDTemp::handleRequest_Ge
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerOn::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerOn::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -860,7 +865,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerOn::handleRequest_G
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerOn::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerOn::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -878,22 +883,28 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerOn::handleRequest_P
 		return pResponseBody;
 	}
 
-	JSON requestBody = JSON::parse(body);
-
-	if (requestBody.empty())
+	if (!body.contains("CoolerOn"))
 	{
+		pResponseBody->setErrorMessage("No Value Supplied");
 		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
-		pResponseBody->setErrorMessage("No Request Body Supplied");
 		return pResponseBody;
 	}
 
-	auto coolerOn = jsonUtils::extractValue<bool>(requestBody, "CoolerOn", false);
+	auto coolerOn = body.extract("CoolerOn", false);
 
-	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientID, UINT32_MAX);
-	auto transactionID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientTransactionID, UINT32_MAX);
-	if (transactionID > 0)
+	if (body.contains(Common::c_paramKeyClientID))
 	{
-		pResponseBody->setClientTransactionID(++transactionID);
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
+
+	}
+
+	if (body.contains(Common::c_paramKeyClientTransactionID))
+	{
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
 	}
 
 	pCamera->setCoolerOn(coolerOn);
@@ -902,7 +913,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerOn::handleRequest_P
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerPower::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerPower::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -933,7 +944,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerPower::handleReques
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ElectronsPerADU::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ElectronsPerADU::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -964,7 +975,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ElectronsPerADU::handleRe
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ExposureMax::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ExposureMax::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -995,7 +1006,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ExposureMax::handleReques
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ExposureMin::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ExposureMin::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1026,7 +1037,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ExposureMin::handleReques
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ExposureResolution::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ExposureResolution::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1057,7 +1068,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ExposureResolution::handl
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_FastReadout::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_FastReadout::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1088,7 +1099,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_FastReadout::handleReques
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_FastReadout::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_FastReadout::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1106,31 +1117,44 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_FastReadout::handleReques
 		return pResponseBody;
 	}
 
-	JSON requestBody = JSON::parse(body);
-
-	if (requestBody.empty())
+	if (!body.contains("FastReadout"))
 	{
+		pResponseBody->setErrorMessage("No Value Supplied");
 		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
-		pResponseBody->setErrorMessage("No Request Body Supplied");
 		return pResponseBody;
 	}
 
-	auto fastReadout = jsonUtils::extractValue<bool>(requestBody, "FastReadout", -1);
-
-	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientID, UINT32_MAX);
-	auto transactionID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientTransactionID, UINT32_MAX);
-	if (transactionID > 0)
+	if (!pCamera->getCanFastReadout())
 	{
-		pResponseBody->setClientTransactionID(++transactionID);
+		pResponseBody->setErrorMessage("Property Not Supported");
+		pResponseBody->setErrorNumber(ErrorCodes::c_notImplemented);
+		return pResponseBody;
 	}
 
+	auto fastReadout = body.extract("FastReadout", false);
+
+	if (body.contains(Common::c_paramKeyClientID))
+	{
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
+
+	}
+
+	if (body.contains(Common::c_paramKeyClientTransactionID))
+	{
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
+	}
+	
 	pCamera->setFastReadout(fastReadout);
 	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Gain::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Gain::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1161,7 +1185,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Gain::handleRequest_Get(s
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Gain::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Gain::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1179,22 +1203,34 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Gain::handleRequest_Put(s
 		return pResponseBody;
 	}
 
-	JSON requestBody = JSON::parse(body);
-
-	if (requestBody.empty())
+	if (!body.contains("Gain"))
 	{
+		pResponseBody->setErrorMessage("No Value Supplied");
 		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
-		pResponseBody->setErrorMessage("No Request Body Supplied");
 		return pResponseBody;
 	}
 
-	auto gain = jsonUtils::extractValue<int>(requestBody, "Gain", -1);
-
-	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientID, UINT32_MAX);
-	auto transactionID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientTransactionID, UINT32_MAX);
-	if (transactionID > 0)
+	auto gain = body.extract("Gain", 0);
+	
+	if (body.contains(Common::c_paramKeyClientID))
 	{
-		pResponseBody->setClientTransactionID(++transactionID);
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
+	}
+
+	if (body.contains(Common::c_paramKeyClientTransactionID))
+	{
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
+	}
+
+	if (gain < pCamera->getGainMin() || gain > pCamera->getGainMax())
+	{
+		pResponseBody->setErrorMessage("Invalid Value Supplied");
+		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
+		return pResponseBody;
 	}
 
 	pCamera->setGain(gain);
@@ -1203,7 +1239,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Gain::handleRequest_Put(s
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_GainMax::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_GainMax::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1234,7 +1270,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_GainMax::handleRequest_Ge
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_GainMin::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_GainMin::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1265,7 +1301,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_GainMin::handleRequest_Ge
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Gains::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Gains::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1296,7 +1332,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Gains::handleRequest_Get(
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_HasShutter::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_HasShutter::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1327,7 +1363,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_HasShutter::handleRequest
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_HeatSinkTemp::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_HeatSinkTemp::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1358,7 +1394,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_HeatSinkTemp::handleReque
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ImageArray::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ImageArray::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1411,7 +1447,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ImageArray::handleRequest
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ImageArrayVariant::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ImageArrayVariant::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1457,7 +1493,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ImageArrayVariant::handle
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ImageReady::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ImageReady::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1488,7 +1524,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ImageReady::handleRequest
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_IsPulseGuiding::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_IsPulseGuiding::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1519,7 +1555,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_IsPulseGuiding::handleReq
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_LastExposureDuration::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_LastExposureDuration::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1544,13 +1580,21 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_LastExposureDuration::han
 		pResponseBody->setClientTransactionID(++transactionID);
 	}
 
-	pResponseBody->setValue(pCamera->getLastExposureDuration());
+	auto lastDuration = pCamera->getLastExposureDuration();
+	if (lastDuration < 0)
+	{
+		pResponseBody->setErrorMessage("No Exposure Has Been Started Yet");
+		pResponseBody->setErrorNumber(ErrorCodes::c_unspecifiedError);
+		return pResponseBody;
+	}
+
+	pResponseBody->setValue(lastDuration);
 	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_LastExposureStartTime::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_LastExposureStartTime::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1575,13 +1619,21 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_LastExposureStartTime::ha
 		pResponseBody->setClientTransactionID(++transactionID);
 	}
 
-	pResponseBody->setValue(pCamera->getLastExposureStartTime());
+	auto lastStartTime = pCamera->getLastExposureStartTime();
+	if (lastStartTime.empty())
+	{
+		pResponseBody->setErrorMessage("No Exposure Has Been Started Yet");
+		pResponseBody->setErrorNumber(ErrorCodes::c_unspecifiedError);
+		return pResponseBody;
+	}
+
+	pResponseBody->setValue(lastStartTime);
 	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_MaxADU::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_MaxADU::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1612,7 +1664,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_MaxADU::handleRequest_Get
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_MaxBinX::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_MaxBinX::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1643,7 +1695,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_MaxBinX::handleRequest_Ge
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_MaxBinY::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_MaxBinY::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1674,7 +1726,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_MaxBinY::handleRequest_Ge
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumX::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumX::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1705,7 +1757,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumX::handleRequest_Get(s
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumX::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumX::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1723,16 +1775,34 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumX::handleRequest_Put(s
 		return pResponseBody;
 	}
 
-	JSON requestBody = JSON::parse(body);
-
-	if (requestBody.empty())
+	if (!body.contains("NumX"))
 	{
+		pResponseBody->setErrorMessage("No Value Supplied");
 		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
-		pResponseBody->setErrorMessage("No Request Body Supplied");
 		return pResponseBody;
 	}
 
-	auto numX = jsonUtils::extractValue<int>(requestBody, "NumX", 0);
+	auto numX = body.extract("NumX", -1);
+	if (numX < 0)
+	{
+		pResponseBody->setErrorMessage("Invalid Value Supplied");
+		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
+		return pResponseBody;
+	}
+
+	if (body.contains(Common::c_paramKeyClientID))
+	{
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
+	}
+
+	if (body.contains(Common::c_paramKeyClientTransactionID))
+	{
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
+	}
 
 	if (numX <= 0 || numX > pCamera->getCameraXSize())
 	{
@@ -1741,20 +1811,13 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumX::handleRequest_Put(s
 		return pResponseBody;
 	}
 
-	auto clientID      = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientID, UINT32_MAX);
-	auto transactionID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientTransactionID, UINT32_MAX);
-	if (transactionID > 0)
-	{
-		pResponseBody->setClientTransactionID(++transactionID);
-	}
-
 	pCamera->setNumX(numX);
 	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumY::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumY::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1785,7 +1848,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumY::handleRequest_Get(s
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumY::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumY::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1803,16 +1866,34 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumY::handleRequest_Put(s
 		return pResponseBody;
 	}
 
-	JSON requestBody = JSON::parse(body);
-
-	if (requestBody.empty())
+	if (!body.contains("NumY"))
 	{
+		pResponseBody->setErrorMessage("No Value Supplied");
 		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
-		pResponseBody->setErrorMessage("No Request Body Supplied");
 		return pResponseBody;
 	}
 
-	auto numY = jsonUtils::extractValue<int>(requestBody, "NumY", 0);
+	auto numY = body.extract("NumY", -1);
+	if (numY < 0)
+	{
+		pResponseBody->setErrorMessage("Invalid Value Supplied");
+		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
+		return pResponseBody;
+	}
+
+	if (body.contains(Common::c_paramKeyClientID))
+	{
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
+	}
+
+	if (body.contains(Common::c_paramKeyClientTransactionID))
+	{
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
+	}
 
 	if (numY <= 0 || numY > pCamera->getCameraYSize())
 	{
@@ -1821,20 +1902,13 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumY::handleRequest_Put(s
 		return pResponseBody;
 	}
 
-	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientID, UINT32_MAX);
-	auto transactionID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientTransactionID, UINT32_MAX);
-	if (transactionID > 0)
-	{
-		pResponseBody->setClientTransactionID(++transactionID);
-	}
-
 	pCamera->setNumY(numY);
 	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Offset::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Offset::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1865,7 +1939,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Offset::handleRequest_Get
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Offset::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Offset::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1883,29 +1957,34 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Offset::handleRequest_Put
 		return pResponseBody;
 	}
 
-	JSON requestBody = JSON::parse(body);
-
-	if (requestBody.empty())
+	if (!body.contains("Offset"))
 	{
+		pResponseBody->setErrorMessage("No Value Supplied");
 		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
-		pResponseBody->setErrorMessage("No Request Body Supplied");
 		return pResponseBody;
 	}
 
-	auto offset = jsonUtils::extractValue<int>(requestBody, "Offset", 0);
+	auto offset = body.extract("Offset", 0);
+
+	if (body.contains(Common::c_paramKeyClientID))
+	{
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
+	}
+
+	if (body.contains(Common::c_paramKeyClientTransactionID))
+	{
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
+	}
 
 	if (offset < pCamera->getOffsetMin() || offset > pCamera->getOffsetMax())
 	{
+		pResponseBody->setErrorMessage("Invalid Value Supplied");
 		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
-		pResponseBody->setErrorMessage("Invalid Value Supplied: Subframe X value out of bounds");
 		return pResponseBody;
-	}
-
-	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientID, UINT32_MAX);
-	auto transactionID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientTransactionID, UINT32_MAX);
-	if (transactionID > 0)
-	{
-		pResponseBody->setClientTransactionID(++transactionID);
 	}
 
 	pCamera->setOffset(offset);
@@ -1914,7 +1993,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Offset::handleRequest_Put
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_OffsetMin::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_OffsetMin::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1945,7 +2024,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_OffsetMin::handleRequest_
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_OffsetMax::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_OffsetMax::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -1976,7 +2055,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_OffsetMax::handleRequest_
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Offsets::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Offsets::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2007,7 +2086,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Offsets::handleRequest_Ge
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PercentComplete::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PercentComplete::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2038,7 +2117,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PercentComplete::handleRe
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PixelSizeX::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PixelSizeX::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2069,7 +2148,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PixelSizeX::handleRequest
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PixelSizeY::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PixelSizeY::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2100,7 +2179,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PixelSizeY::handleRequest
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_FullWellCapacity::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_FullWellCapacity::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2131,7 +2210,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_FullWellCapacity::handleR
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ReadoutMode::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ReadoutMode::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2162,7 +2241,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ReadoutMode::handleReques
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ReadoutMode::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ReadoutMode::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2180,22 +2259,36 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ReadoutMode::handleReques
 		return pResponseBody;
 	}
 
-	JSON requestBody = JSON::parse(body);
 
-	if (requestBody.empty())
+	if (!body.contains("Gain"))
 	{
+		pResponseBody->setErrorMessage("No Value Supplied");
 		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
-		pResponseBody->setErrorMessage("No Request Body Supplied");
 		return pResponseBody;
 	}
 
-	auto mode = jsonUtils::extractValue<int>(requestBody, "ReadoutMode", 0);
+	auto mode = body.extract("ReadoutMode", 0);
 
-	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientID, UINT32_MAX);
-	auto transactionID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientTransactionID, UINT32_MAX);
-	if (transactionID > 0)
+	if (body.contains(Common::c_paramKeyClientID))
 	{
-		pResponseBody->setClientTransactionID(++transactionID);
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
+	}
+
+	if (body.contains(Common::c_paramKeyClientTransactionID))
+	{
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
+	}
+
+	auto modes = pCamera->getReadoutModes();
+	if (mode < 0 || mode > modes.size())
+	{
+		pResponseBody->setErrorMessage("Invalid Value Supplied");
+		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
+		return pResponseBody;
 	}
 
 	pCamera->setReadoutMode(mode);
@@ -2204,7 +2297,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ReadoutMode::handleReques
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ReadoutModes::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ReadoutModes::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2235,7 +2328,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ReadoutModes::handleReque
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_SensorName::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_SensorName::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2266,7 +2359,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_SensorName::handleRequest
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_SensorType::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_SensorType::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2299,7 +2392,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_SensorType::handleRequest
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerSetpoint::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerSetpoint::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2330,7 +2423,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerSetpoint::handleReq
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerSetpoint::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerSetpoint::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2348,32 +2441,40 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerSetpoint::handleReq
 		return pResponseBody;
 	}
 
-	JSON requestBody = JSON::parse(body);
-
-	if (requestBody.empty())
+	if (!body.contains("SetCCDTemperature"))
 	{
+		pResponseBody->setErrorMessage("No Value Supplied");
 		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
-		pResponseBody->setErrorMessage("No Request Body Supplied");
 		return pResponseBody;
 	}
 
-	auto setpoint = jsonUtils::extractValue<double>(requestBody, "SetCCDTemperature ", 0.0);
+	auto setpoint = body.extract("SetCCDTemperature", pCamera->getCCDTemp());
 
-	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientID, UINT32_MAX);
-	auto transactionID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientTransactionID, UINT32_MAX);
-	if (transactionID > 0)
+	if (body.contains(Common::c_paramKeyClientID))
 	{
-		pResponseBody->setClientTransactionID(++transactionID);
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
 	}
 
-	pCamera->setCoolerSetpoint(setpoint);
+	if (body.contains(Common::c_paramKeyClientTransactionID))
+	{
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
+	}
+
+	if (pCamera->getCanSetCCDTemp())
+	{
+		pCamera->setCoolerSetpoint(setpoint);
+	}
 	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
 
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartX::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartX::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2404,7 +2505,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartX::handleRequest_Get
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartX::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartX::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2422,29 +2523,34 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartX::handleRequest_Put
 		return pResponseBody;
 	}
 
-	JSON requestBody = JSON::parse(body);
-
-	if (requestBody.empty())
+	if (!body.contains("StartX"))
 	{
+		pResponseBody->setErrorMessage("No Value Supplied");
 		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
-		pResponseBody->setErrorMessage("No Request Body Supplied");
 		return pResponseBody;
 	}
 
-	auto startX = jsonUtils::extractValue<int>(requestBody, "StartX", 0);
+	auto startX = body.extract("StartX", 0);
 
-	if (startX <= 0 || startX > pCamera->getCameraXSize())
+	if (body.contains(Common::c_paramKeyClientID))
+	{
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
+	}
+
+	if (body.contains(Common::c_paramKeyClientTransactionID))
+	{
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
+	}
+
+	if (startX < 0 || startX > pCamera->getCameraXSize())
 	{
 		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
 		pResponseBody->setErrorMessage("Invalid Value Supplied: Start X value out of bounds");
 		return pResponseBody;
-	}
-
-	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientID, UINT32_MAX);
-	auto transactionID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientTransactionID, UINT32_MAX);
-	if (transactionID > 0)
-	{
-		pResponseBody->setClientTransactionID(++transactionID);
 	}
 
 	pCamera->setStartX(startX);
@@ -2452,7 +2558,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartX::handleRequest_Put
 
 	return pResponseBody;
 }
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartY::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartY::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2483,7 +2589,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartY::handleRequest_Get
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartY::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartY::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2501,30 +2607,36 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartY::handleRequest_Put
 		return pResponseBody;
 	}
 
-	JSON requestBody = JSON::parse(body);
-
-	if (requestBody.empty())
+	if (!body.contains("StartY"))
 	{
+		pResponseBody->setErrorMessage("No Value Supplied");
 		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
-		pResponseBody->setErrorMessage("No Request Body Supplied");
 		return pResponseBody;
 	}
 
-	auto startY = jsonUtils::extractValue<int>(requestBody, "StartY", 0);
+	auto startY = body.extract("StartY", 0);
 
-	if (startY <= 0 || startY > pCamera->getCameraYSize())
+	if (body.contains(Common::c_paramKeyClientID))
+	{
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
+	}
+
+	if (body.contains(Common::c_paramKeyClientTransactionID))
+	{
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
+	}
+
+	if (startY < 0 || startY > pCamera->getCameraYSize())
 	{
 		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
-		pResponseBody->setErrorMessage("Invalid Value Supplied: Start Y value out of bounds");
+		pResponseBody->setErrorMessage("Invalid Value Supplied: Start X value out of bounds");
 		return pResponseBody;
 	}
 
-	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientID, UINT32_MAX);
-	auto transactionID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientTransactionID, UINT32_MAX);
-	if (transactionID > 0)
-	{
-		pResponseBody->setClientTransactionID(++transactionID);
-	}
 
 	pCamera->setStartY(startY);
 	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
@@ -2532,7 +2644,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartY::handleRequest_Put
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_SubExposureDuration::handleRequest_Get(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_SubExposureDuration::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2563,7 +2675,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_SubExposureDuration::hand
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_SubExposureDuration::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_SubExposureDuration::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2581,16 +2693,28 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_SubExposureDuration::hand
 		return pResponseBody;
 	}
 
-	JSON requestBody = JSON::parse(body);
-
-	if (requestBody.empty())
+	if (!body.contains("SubExposureDuration"))
 	{
+		pResponseBody->setErrorMessage("No Value Supplied");
 		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
-		pResponseBody->setErrorMessage("No Request Body Supplied");
 		return pResponseBody;
 	}
 
-	auto subExposureDuration = jsonUtils::extractValue<double>(requestBody, "SubExposureDuration ", -1.0);
+	auto subExposureDuration = body.extract("SubExposureDuration", -1.0);
+
+	if (body.contains(Common::c_paramKeyClientID))
+	{
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
+	}
+
+	if (body.contains(Common::c_paramKeyClientTransactionID))
+	{
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
+	}
 
 	if (subExposureDuration < 0)
 	{
@@ -2599,20 +2723,13 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_SubExposureDuration::hand
 		return pResponseBody;
 	}
 
-	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientID, UINT32_MAX);
-	auto transactionID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientTransactionID, UINT32_MAX);
-	if (transactionID > 0)
-	{
-		pResponseBody->setClientTransactionID(++transactionID);
-	}
-
 	pCamera->setSubExposureDuration(subExposureDuration);
 	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_AbortExposure::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_AbortExposure::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2630,20 +2747,18 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_AbortExposure::handleRequ
 		return pResponseBody;
 	}
 
-	JSON requestBody = JSON::parse(body);
-
-	if (requestBody.empty())
+	if (body.contains(Common::c_paramKeyClientID))
 	{
-		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
-		pResponseBody->setErrorMessage("No Request Body Supplied");
-		return pResponseBody;
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
 	}
 
-	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientID, UINT32_MAX);
-	auto transactionID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientTransactionID, UINT32_MAX);
-	if (transactionID > 0)
+	if (body.contains(Common::c_paramKeyClientTransactionID))
 	{
-		pResponseBody->setClientTransactionID(++transactionID);
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
 	}
 
 	if (!pCamera->getCanAbortExposure())
@@ -2659,7 +2774,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_AbortExposure::handleRequ
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PulseGuide::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PulseGuide::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2677,21 +2792,25 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PulseGuide::handleRequest
 		return pResponseBody;
 	}
 
-	JSON requestBody = JSON::parse(body);
-
-	if (requestBody.empty())
+	if (body.empty())
 	{
 		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
 		pResponseBody->setErrorMessage("No Request Body Supplied");
 		return pResponseBody;
 	}
 
-
-	auto clientID      = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientID, UINT32_MAX);
-	auto transactionID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientTransactionID, UINT32_MAX);
-	if (transactionID > 0)
+	if (body.contains(Common::c_paramKeyClientID))
 	{
-		pResponseBody->setClientTransactionID(++transactionID);
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
+	}
+
+	if (body.contains(Common::c_paramKeyClientTransactionID))
+	{
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
 	}
 
 	if (!pCamera->getCanPulseGuide())
@@ -2701,8 +2820,21 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PulseGuide::handleRequest
 		return pResponseBody;
 	}
 
-	auto pulseGuideDirection = jsonUtils::extractValue<Camera::PulseGuideDirection, int>(requestBody, "Direction ", Camera::PulseGuideDirection::Unknown);
-	auto pulseGuideDuration  = jsonUtils::extractValue<int>(requestBody, "Duration ", -1);
+	if (!body.contains("Direction"))
+	{
+		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
+		pResponseBody->setErrorMessage("No Pulse Guide Direction Supplied");
+		return pResponseBody;
+	}
+	if (!body.contains("Duration"))
+	{
+		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
+		pResponseBody->setErrorMessage("No Pulse Guide Duration Supplied");
+		return pResponseBody;
+	}
+
+	auto pulseGuideDirection = static_cast<Camera::PulseGuideDirection>(body.extract("Direction", -1));
+	auto pulseGuideDuration  = body.extract("Duration", -1);
 	
 	if (pulseGuideDirection == Camera::PulseGuideDirection::Unknown)
 	{
@@ -2718,6 +2850,12 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PulseGuide::handleRequest
 		return pResponseBody;
 	}
 
+	if (pCamera->getIsPulseGuiding())
+	{
+		pResponseBody->setErrorNumber(ErrorCodes::c_unspecifiedError);
+		pResponseBody->setErrorMessage("Camera Already Pulse Guiding");
+		return pResponseBody;
+	}
 
 	pCamera->pulseGuide(pulseGuideDirection, pulseGuideDuration);
 	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
@@ -2725,7 +2863,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PulseGuide::handleRequest
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartExposure::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartExposure::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2743,29 +2881,54 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartExposure::handleRequ
 		return pResponseBody;
 	}
 
-	JSON requestBody = JSON::parse(body);
-
-	if (requestBody.empty())
+	if (body.empty())
 	{
 		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
 		pResponseBody->setErrorMessage("No Request Body Supplied");
 		return pResponseBody;
 	}
 
-	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientID, UINT32_MAX);
-	auto transactionID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientTransactionID, UINT32_MAX);
-	if (transactionID > 0)
+	if (body.contains(Common::c_paramKeyClientID))
 	{
-		pResponseBody->setClientTransactionID(++transactionID);
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
 	}
 
-	auto duration = jsonUtils::extractValue<double>(requestBody, "Direction ", -1.0);
-	auto isLight  = jsonUtils::extractValue<bool>(requestBody, "Duration ", false);
+	if (body.contains(Common::c_paramKeyClientTransactionID))
+	{
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
+	}
+
+	if (!body.contains("Duration"))
+	{
+		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
+		pResponseBody->setErrorMessage("No Duration Supplied");
+		return pResponseBody;
+	}
+	if (!body.contains("Light"))
+	{
+		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
+		pResponseBody->setErrorMessage("No Light Frame Parameter Supplied");
+		return pResponseBody;
+	}
+
+	auto duration = body.extract("Duration", -1.0);
+	auto isLight  = body.extract("Light", false);
 
 	if (duration < 0)
 	{
 		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
-		pResponseBody->setErrorMessage("Exposure Duration Provided");
+		pResponseBody->setErrorMessage("Invalid Exposure Duration Provided");
+		return pResponseBody;
+	}
+
+	if (pCamera->getDeviceBusy())
+	{
+		pResponseBody->setErrorNumber(ErrorCodes::c_unspecifiedError);
+		pResponseBody->setErrorMessage("Device Is Busy");
 		return pResponseBody;
 	}
 
@@ -2775,7 +2938,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartExposure::handleRequ
 	return pResponseBody;
 }
 
-std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StopExposure::handleRequest_Put(std::string target, QueryList queries, std::string body, TRESTCtxPtr pCtx)
+std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StopExposure::handleRequest_Put(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
 {
 	auto pCamera = std::dynamic_pointer_cast<IAlpacaCamV1>(pCtx);
 	if (!pCamera)
@@ -2794,20 +2957,25 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StopExposure::handleReque
 		return pResponseBody;
 	}
 
-	JSON requestBody = JSON::parse(body);
-
-	if (requestBody.empty())
+	if (body.empty())
 	{
 		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
 		pResponseBody->setErrorMessage("No Request Body Supplied");
 		return pResponseBody;
 	}
 
-	auto clientID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientID, UINT32_MAX);
-	auto transactionID = jsonUtils::extractValue<unsigned int>(requestBody, Common::c_paramKeyClientTransactionID, UINT32_MAX);
-	if (transactionID > 0)
+	if (body.contains(Common::c_paramKeyClientID))
 	{
-		pResponseBody->setClientTransactionID(++transactionID);
+		auto clientID = body.extract(Common::c_paramKeyClientID, 0);
+	}
+
+	if (body.contains(Common::c_paramKeyClientTransactionID))
+	{
+		auto transactionID = body.extract(Common::c_paramKeyClientTransactionID, 0);
+		if (transactionID > 0)
+		{
+			pResponseBody->setClientTransactionID(++transactionID);
+		}
 	}
 
 	if (!pCamera->getCanStopExposure())
@@ -2818,6 +2986,5 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StopExposure::handleReque
 	}
 
 	pCamera->stopExposure();
-
 	return pResponseBody;
 }

@@ -38,6 +38,8 @@ public:
 	DEVICEPROP(DeviceTypeID, DeviceType,   deviceType)
 	DEVICEPROP(unsigned int, DeviceNumber, deviceNumber)
 
+	DEVICEPROP(bool, DeviceBusy, deviceBusy)
+
 public:
 	AlpacaDeviceV1(DeviceTypeID type, unsigned int deviceNum, std::string deviceName);
 	virtual ~AlpacaDeviceV1();
@@ -47,6 +49,9 @@ public:
 	virtual void commandBlind(std::string cmd,  std::string raw) = 0;
 	virtual bool commandBool(std::string cmd,   std::string raw) = 0;
 	virtual std::string commandString(std::string cmd, std::string raw) = 0;
+
+	virtual void connect() = 0;
+	virtual void disconnect() = 0;
 
 private:
 	void initCommonEndpoints();

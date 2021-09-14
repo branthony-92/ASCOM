@@ -2,8 +2,10 @@
 #define CAMERASTATES_H
 
 #include "SMBase.h"
+#include "CamEvents.h"
 
 namespace Camera {
+namespace States {
 
 	// each camera state will inherit from the SMBase class so we can treat them as a state or state machine
 	class CameraState : public CSMBase
@@ -13,19 +15,37 @@ namespace Camera {
 		{
 			CamState_Unknown = -1,
 	
-			CamState_NotConnected,
+			CamState_FirstState,
+
+			CamState_NotConnected = CamState_FirstState,
 			CamState_Connecting,
 			CamState_Idle,
+			
 			CamState_Exposing,
+			// Exposing substates
+			CamState_Exposing_FirstSubstate,
+
+			CamState_Exposing_GeneratingBackground = CamState_Exposing_FirstSubstate,
+			CamState_Exposing_GeneratingImage,
+			CamState_Exposing_Transferring,
+			CamState_Exposing_Stopped,
+
+			CamState_Exposing_LastSubstate = CamState_Exposing_Stopped,
+
+			CamState_PulseGuiding,
+			CamState_Disconnecting,
+
 			CamState_Error,
 		
-			eNumStates
+			NumStates
 		};
 
 		CameraState(StateID ID, std::string name)
 			: CSMBase(static_cast<uint32_t>(ID), name)
 		{}
 		virtual ~CameraState() {}
+
+		void addTransition(Event::EventID eventID, StateID targetStateID);
 	};
 	typedef std::shared_ptr<CameraState> CamStatePtr;
 
@@ -104,6 +124,36 @@ namespace Camera {
 	};
 	typedef std::shared_ptr<CameraState_Exposing> ExposingStatePtr;
 
+	class CameraState_PulseGuiding : public CameraState
+	{
+	public:
+		CameraState_PulseGuiding()
+			: CameraState(CameraState::StateID::CamState_PulseGuiding, "CamState_PulseGuiding")
+		{}
+
+		virtual bool enterState(TContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool ticState(TContextPtr pCtx) override;
+		virtual bool exitState(TContextPtr pCtx, TEventPtr pEvent) override;
+
+		virtual void initTransitionTable() override;
+	};
+	typedef std::shared_ptr<CameraState_PulseGuiding> PulseGuidingStatePtr;
+
+	class CameraState_Disconnecting : public CameraState
+	{
+	public:
+		CameraState_Disconnecting()
+			: CameraState(CameraState::StateID::CamState_Disconnecting, "CamState_Disconnecting")
+		{}
+
+		virtual bool enterState(TContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool ticState(TContextPtr pCtx) override;
+		virtual bool exitState(TContextPtr pCtx, TEventPtr pEvent) override;
+
+		virtual void initTransitionTable() override;
+	};
+	typedef std::shared_ptr<CameraState_Disconnecting> DisconnectingStatePtr;
+
 	class CameraState_Error : public CameraState
 	{
 	public:
@@ -118,5 +168,68 @@ namespace Camera {
 		virtual void initTransitionTable() override;
 	};
 	typedef std::shared_ptr<CameraState_Error> ErrorStatePtr;
+
+	class CameraState_Exposing_GeneratingBackground : public CameraState
+	{
+	public:
+		CameraState_Exposing_GeneratingBackground()
+			: CameraState(CameraState::StateID::CamState_Exposing_GeneratingBackground, "CamState_Exposing_GeneratingBackground")
+		{}
+
+		virtual bool enterState(TContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool ticState(TContextPtr pCtx) override;
+		virtual bool exitState(TContextPtr pCtx, TEventPtr pEvent) override;
+
+		virtual void initTransitionTable() override;
+	};
+	typedef std::shared_ptr<CameraState_Exposing_GeneratingBackground> ExposingState_GeneratingBackgroundPtr;
+
+	class CameraState_Exposing_GeneratingImage : public CameraState
+	{
+	public:
+		CameraState_Exposing_GeneratingImage()
+			: CameraState(CameraState::StateID::CamState_Exposing_GeneratingImage, "CamState_Exposing_GeneratingImage")
+		{}
+
+		virtual bool enterState(TContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool ticState(TContextPtr pCtx) override;
+		virtual bool exitState(TContextPtr pCtx, TEventPtr pEvent) override;
+
+		virtual void initTransitionTable() override;
+	};
+	typedef std::shared_ptr<CameraState_Exposing_GeneratingImage> ExposingState_GeneratingImgPtr;
+
+	class CameraState_Exposing_Transferring : public CameraState
+	{
+	public:
+		CameraState_Exposing_Transferring()
+			: CameraState(CameraState::StateID::CamState_Exposing_Transferring, "CamState_Exposing_Transferring")
+		{}
+
+		virtual bool enterState(TContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool ticState(TContextPtr pCtx) override;
+		virtual bool exitState(TContextPtr pCtx, TEventPtr pEvent) override;
+
+		virtual void initTransitionTable() override;
+	};
+	typedef std::shared_ptr<CameraState_Exposing_Transferring> ExposingState_TransferringPtr;
+	
+	class CameraState_Exposing_Stopped : public CameraState
+	{
+	public:
+		CameraState_Exposing_Stopped()
+			: CameraState(CameraState::StateID::CamState_Exposing_Stopped, "CamState_Exposing_Stopped")
+		{}
+
+		virtual bool enterState(TContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool ticState(TContextPtr pCtx) override;
+		virtual bool exitState(TContextPtr pCtx, TEventPtr pEvent) override;
+
+		virtual void initTransitionTable() override;
+	};
+	typedef std::shared_ptr<CameraState_Exposing_Stopped> ExposingState_StoppedPtr;
+
+	CamStatePtr createState(CameraState::StateID);
+}
 }
 #endif // !CAMERASTATES_H
