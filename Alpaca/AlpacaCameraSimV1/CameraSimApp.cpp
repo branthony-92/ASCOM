@@ -27,6 +27,9 @@ App::CameraSimApp::~CameraSimApp()
 		
 		file.close();
 	}
+	m_pCameraStateMachine = nullptr;
+	m_pMainFrame = nullptr;
+	m_pServer = nullptr;
 }
 
 bool CameraSimApp::init()

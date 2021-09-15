@@ -61,6 +61,7 @@ IAlpacaCamV1::IAlpacaCamV1(unsigned int deviceNum, std::string deviceName)
 	, m_startY(0)
 	, m_subExposureDuration(0.0)
 	, m_pImageArray()
+	, m_isLight(false)
 {
 	m_pImageArray = std::make_shared<Image::ImageData>();
 	unsigned short* pBuf = new unsigned short[m_numX * m_numY];

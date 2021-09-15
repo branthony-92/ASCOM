@@ -21,7 +21,7 @@ CameraStateMachine::~CameraStateMachine()
 void SM::CameraStateMachine::initSM()
 {
 	auto stateFirst = static_cast<unsigned int>(CameraState::StateID::CamState_FirstState);
-	auto stateLast  = static_cast<unsigned int>(CameraState::StateID::NumStates);
+	auto stateLast  = static_cast<unsigned int>(CameraState::StateID::NumBaseStates);
 
 	TStateList stateTable;
 
@@ -34,7 +34,7 @@ void SM::CameraStateMachine::initSM()
 		if (pState)
 		{
 			pState->initTransitionTable();
-			stateTable.push_back(pState);
+			stateTable.insert_or_assign(i, pState);
 		}
 	}
 

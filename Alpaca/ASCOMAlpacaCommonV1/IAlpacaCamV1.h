@@ -94,6 +94,7 @@ class IAlpacaCamV1 : public AlpacaDeviceV1
 
 	// One of each possible image types
 	DEVICEPROP(Image::ImageDataPtr, ImageArray, pImageArray)
+	DEVICEPROP(bool, IsLight, isLight)
 
 public:
 	IAlpacaCamV1(unsigned int deviceNum, std::string deviceName);

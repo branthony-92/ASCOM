@@ -407,6 +407,12 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinX::handleRequest_Put(s
 	}
 
 	pCamera->setBinX(binX);
+
+	if (!pCamera->getCanAsymmetricBin())
+	{
+		pCamera->setBinY(binX);
+	}
+
 	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
@@ -461,7 +467,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinY::handleRequest_Put(s
 		return pResponseBody;
 	}
 
-	auto binY = body.extract("BinX", 0);
+	auto binY = body.extract("BinY", 0);
 
 	if (binY <= 0 || binY > pCamera->getMaxBinY())
 	{
@@ -486,6 +492,12 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinY::handleRequest_Put(s
 	}
 
 	pCamera->setBinY(binY);
+
+	if (!pCamera->getCanAsymmetricBin())
+	{
+		pCamera->setBinX(binY);
+	}
+
 	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
@@ -1456,6 +1468,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ImageArrayVariant::handle
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::ImageResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1472,12 +1485,25 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ImageArrayVariant::handle
 		pResponseBody->setClientTransactionID(++transactionID);
 	}
 
+	if (!pCamera->getConnected())
+	{
+		pResponseBody->setErrorNumber(ErrorCodes::c_notConnected);
+		pResponseBody->setErrorMessage("Image is not valid");
+		return pResponseBody;
+	}
+
 	auto pImgData = pCamera->getImageArray();
 
 	if (!pImgData)
 	{
 		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
 		pResponseBody->setErrorMessage("No Image Stored");
+		return pResponseBody;
+	}
+	if (!pImgData->validate())
+	{
+		pResponseBody->setErrorNumber(ErrorCodes::c_valueNotSet);
+		pResponseBody->setErrorMessage("Image is not valid");
 		return pResponseBody;
 	}
 
@@ -1488,7 +1514,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ImageArrayVariant::handle
 	pResponseBody->setType(type);
 
 	pResponseBody->setImageData(pCamera->getImageArray());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }

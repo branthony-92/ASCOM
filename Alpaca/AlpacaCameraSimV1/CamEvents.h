@@ -68,7 +68,6 @@ std::shared_ptr<CameraEvent<ID>> create()
 	const std::map<EventID, std::string> c_eventReflectionMap = {
 		{ EventID::CamEvent_Unknown,         "CamEvent_Unknown"        },
 		{ EventID::CamEvent_Success,		 "CamEvent_Success"        },
-		{ EventID::CamEvent_Failure,		 "CamEvent_Failure"        },
 		{ EventID::CamEvent_Connect,		 "CamEvent_Connect"        },
 		{ EventID::CamEvent_StartExposure,	 "CamEvent_StartExposure"  },
 		{ EventID::CamEvent_StopExposure,	 "CamEvent_StopExposure"   },

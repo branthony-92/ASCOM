@@ -120,6 +120,7 @@ namespace Image  {
 		bool isValid() const { 
 			if (!m_pImageBuffer) return false;
 			if (m_pImageBuffer->getLength() == 0) return false;
+			return true;
 		}
 		DEVICEPROP(std::shared_ptr<Buffer>, ImageBuffer, pImageBuffer)
 
