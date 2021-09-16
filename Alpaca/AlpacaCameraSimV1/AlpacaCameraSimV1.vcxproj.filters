@@ -17,12 +17,6 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
-    <Filter Include="Header Files\CamSM">
-      <UniqueIdentifier>{a24146bf-27ad-41fe-9774-e72536e131ae}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\CamSM">
-      <UniqueIdentifier>{ca25ac92-c270-4cdd-9bdb-572e7302967e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Form Files">
       <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
       <Extensions>ui</Extensions>
@@ -34,22 +28,34 @@
     <Filter Include="Source Files\GUI">
       <UniqueIdentifier>{344854cb-ed29-43b2-b4b0-8328b6b85eec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Application">
+      <UniqueIdentifier>{a4baefc2-2ffa-42b4-8db1-c1156d737e78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Camera">
+      <UniqueIdentifier>{b73158e5-6861-4454-9ba6-8c70c685e5a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Camera\CamSM">
+      <UniqueIdentifier>{a24146bf-27ad-41fe-9774-e72536e131ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Camera">
+      <UniqueIdentifier>{49cb6299-35e3-4c15-9cc5-3d0685f4dee3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Camera\CamSM">
+      <UniqueIdentifier>{ca25ac92-c270-4cdd-9bdb-572e7302967e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CameraV1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CameraStateMachine.cpp">
-      <Filter>Source Files\CamSM</Filter>
+      <Filter>Source Files\Camera\CamSM</Filter>
     </ClCompile>
     <ClCompile Include="CameraStates.cpp">
-      <Filter>Source Files\CamSM</Filter>
+      <Filter>Source Files\Camera\CamSM</Filter>
     </ClCompile>
     <ClCompile Include="CamEvents.cpp">
-      <Filter>Source Files\CamSM</Filter>
+      <Filter>Source Files\Camera\CamSM</Filter>
     </ClCompile>
     <ClCompile Include="DlgMainFrame.cpp">
       <Filter>Source Files\GUI</Filter>
@@ -57,46 +63,49 @@
     <ClCompile Include="CameraSimApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CamServer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DlgServerSetup.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="DeviceView.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="CameraV1.cpp">
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="CamServer.cpp">
+      <Filter>Source Files\Camera</Filter>
     </ClCompile>
     <ClCompile Include="DeviceModel.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceView.cpp">
+      <Filter>Source Files\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CameraV1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CameraStateMachine.h">
-      <Filter>Header Files\CamSM</Filter>
+      <Filter>Header Files\Camera\CamSM</Filter>
     </ClInclude>
     <ClInclude Include="CameraStates.h">
-      <Filter>Header Files\CamSM</Filter>
+      <Filter>Header Files\Camera\CamSM</Filter>
     </ClInclude>
     <ClInclude Include="CamEvents.h">
-      <Filter>Header Files\CamSM</Filter>
+      <Filter>Header Files\Camera\CamSM</Filter>
     </ClInclude>
     <ClInclude Include="CameraSimApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CamServer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="CameraV1.h">
+      <Filter>Header Files\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="DeviceView.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="CamServer.h">
+      <Filter>Header Files\Camera</Filter>
     </ClInclude>
     <ClInclude Include="DeviceModel.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceView.h">
+      <Filter>Header Files\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

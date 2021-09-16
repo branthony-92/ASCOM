@@ -4,6 +4,7 @@
 #include "RESTServerContext.h"
 #include "AlpacaUtils.h"
 
+namespace Alpaca {
 
 class AlpacaDeviceV1 : public RESTServerContext
 {
@@ -56,6 +57,7 @@ public:
 private:
 	void initCommonEndpoints();
 };
+typedef std::list<std::shared_ptr<AlpacaDeviceV1>>  DeviceList;
 
-
+}
 #endif // !ALPACADEVICEV1_H

@@ -21,9 +21,8 @@ public:
 		std::string    diffieHellmanParamFilePath;
 	};
 
-	CameraServer(Camera::CamPtr pCam)
-		: Server(pCam)
-		, m_pCamera(pCam)
+	CameraServer()
+		: Server()
 		, m_configData()
 		, m_lastError()
 	{}
@@ -35,9 +34,8 @@ public:
 private:
 	SSLCtxInitHandler m_fHandler;
 
-	DEVICEPROP(Camera::CamPtr, Camera, pCamera)
 	DEVICEPROP(ServerConfigurationData, ConfigData, configData)
-	DEVICEPROP(std::string, LastError, lastError)
+	DEVICEPROP(std::string,             LastError,   lastError)
 };
 typedef std::shared_ptr<CameraServer> CamServerPtr;
 

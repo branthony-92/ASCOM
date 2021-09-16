@@ -5,25 +5,28 @@ using namespace CamServer;
 
 bool CameraServer::start(ServerConfigurationData& info)
 {
-	if (!m_pCamera)
+	if (m_serverContexts.empty())
 	{
-		m_lastError = "No Camera";
+		m_lastError = "No Devices Registered";
 		return false;
 	}
 
-	auto pInfo = m_pCamera->getServerInfo();
-	pInfo->setServerName("Alpaca Camera Simulator Server");
-	pInfo->setAPIVer(1.0);
-	pInfo->setIdleTimeout(300u); // 5 min timeout
+	m_pInfo->setServerName("Alpaca Camera Simulator Server");
+	m_pInfo->setAPIVer(1.0);
+	m_pInfo->setIdleTimeout(300u); // 5 min timeout
 
-	m_pCamera->setServerInfo(pInfo);
+	auto& endpointList = m_pInfo->getEndpointNames();
+	endpointList.clear();
+	for (auto& pDevice : m_serverContexts)
+	{
+		endpointList.push_back(pDevice->getHandlerInfo());
+	}
 
-	auto configPath          = info.configFilePath;
 	auto certificateFilePath = info.certificateFilePath;
 	auto privKeyPath         = info.privKeyFilePath;
 	auto dhParamPath         = info.diffieHellmanParamFilePath;
 
-	auto ssl_callback = [configPath, certificateFilePath, privKeyPath, dhParamPath](boost::asio::ssl::context& ctx) -> bool
+	auto ssl_callback = [certificateFilePath, privKeyPath, dhParamPath](boost::asio::ssl::context& ctx) -> bool
 	{
 		try {
 			printf("SSL Context Callback entered\n");
@@ -61,12 +64,12 @@ bool CameraServer::start(ServerConfigurationData& info)
 
 	if (info.useHTTPS)
 	{
-		pSessionPrototype = std::make_shared<GenericSessionHTTPS>(m_pCamera);
+		pSessionPrototype = std::make_shared<GenericSessionHTTPS>(m_serverContexts);
 		reasonStr = "Failed to start HTTPS server";
 	}
 	else
 	{
-		pSessionPrototype = std::make_shared<GenericSessionHTTP>(m_pCamera);
+		pSessionPrototype = std::make_shared<GenericSessionHTTP>(m_serverContexts);
 		reasonStr = "Failed to start HTTP server";
 	}
 	serverStarted = startServer(info.IPv4Address, info.port, pSessionPrototype, ssl_callback);
@@ -84,6 +87,5 @@ bool CameraServer::start(ServerConfigurationData& info)
 bool CameraServer::stop()
 {
 	reset();
-	m_pCamera->disconnect();
 	return true;
 }

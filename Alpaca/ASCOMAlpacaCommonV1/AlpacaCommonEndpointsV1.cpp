@@ -432,17 +432,14 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Connected::handleRequest_
 
 	auto newConnectedStatus = body.extract("Connected", false);
 
-	if (pDevice->getConnected() && !newConnectedStatus)
-	{
-		pDevice->disconnect();
-	}
-	else if (!pDevice->getConnected() && newConnectedStatus)
+	if (newConnectedStatus)
 	{
 		pDevice->connect();
 	}
-
-	pDevice->setConnected(newConnectedStatus);
-
+	else 
+	{
+		pDevice->disconnect();
+	}
 	return pResponseBody;
 }
 
@@ -526,6 +523,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_DriverVersion::handleRequ
 
 	}
 	auto pResponseBody = std::make_shared<Bodies::StringResponse>();
+	pResponseBody->setServerTransactionID(pDevice->getNextransactionID());
 
 	if (!(queries.contains(c_paramKeyDeviceType) && queries.contains("c_paramKeyDeviceNumber")))
 	{
@@ -561,6 +559,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_InterfaceVersion::handleR
 
 	}
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pDevice->getNextransactionID());
 
 	if (!(queries.contains(c_paramKeyDeviceType) && queries.contains("c_paramKeyDeviceNumber")))
 	{
@@ -596,6 +595,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_Name::handleRequest_Get(s
 
 	}
 	auto pResponseBody = std::make_shared<Bodies::StringResponse>();
+	pResponseBody->setServerTransactionID(pDevice->getNextransactionID());
 
 	if (!(queries.contains(c_paramKeyDeviceType) && queries.contains("c_paramKeyDeviceNumber")))
 	{
@@ -632,6 +632,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Common::Endpoint_SupportedActions::handleR
 
 	}
 	auto pResponseBody = std::make_shared<Bodies::StringArrayResponse>();
+	pResponseBody->setServerTransactionID(pDevice->getNextransactionID());
 
 	if (!(queries.contains(c_paramKeyDeviceType) && queries.contains("c_paramKeyDeviceNumber")))
 	{

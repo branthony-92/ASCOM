@@ -273,6 +273,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BayerOffsetX::handleReque
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -290,7 +291,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BayerOffsetX::handleReque
 	}
 
 	pResponseBody->setValue(pCamera->getBayerOffsetX());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -304,6 +304,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BayerOffsetY::handleReque
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -321,7 +322,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BayerOffsetY::handleReque
 	}
 
 	pResponseBody->setValue(pCamera->getBayerOffsetY());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -335,6 +335,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinX::handleRequest_Get(s
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -352,7 +353,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinX::handleRequest_Get(s
 	}
 
 	pResponseBody->setValue(pCamera->getBinX());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -366,6 +366,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinX::handleRequest_Put(s
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::MethodResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -413,8 +414,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinX::handleRequest_Put(s
 		pCamera->setBinY(binX);
 	}
 
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -427,6 +426,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinY::handleRequest_Get(s
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -444,7 +444,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinY::handleRequest_Get(s
 	}
 
 	pResponseBody->setValue(pCamera->getBinY());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -458,6 +457,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinY::handleRequest_Put(s
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::MethodResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -498,7 +498,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_BinY::handleRequest_Put(s
 		pCamera->setBinX(binY);
 	}
 
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -512,6 +511,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CameraState::handleReques
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -531,7 +531,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CameraState::handleReques
 	auto stateID = static_cast<int>(pCamera->getCameraState());
 
 	pResponseBody->setValue(stateID);
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -545,6 +544,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CameraXSize::handleReques
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -562,7 +562,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CameraXSize::handleReques
 	}
 
 	pResponseBody->setValue(pCamera->getCameraXSize());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -576,6 +575,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CameraYSize::handleReques
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -593,7 +593,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CameraYSize::handleReques
 	}
 
 	pResponseBody->setValue(pCamera->getCameraYSize());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -607,6 +606,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanAbortExposure::handleR
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::BoolResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -624,7 +624,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanAbortExposure::handleR
 	}
 
 	pResponseBody->setValue(pCamera->getCanAbortExposure());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -638,6 +637,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanAsymmetricBin::handleR
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::BoolResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -655,7 +655,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanAsymmetricBin::handleR
 	}
 
 	pResponseBody->setValue(pCamera->getCanAsymmetricBin());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -669,6 +668,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanFastReadout::handleReq
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::BoolResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -686,7 +686,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanFastReadout::handleReq
 	}
 
 	pResponseBody->setValue(pCamera->getCanFastReadout());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -700,6 +699,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanGetCoolerPower::handle
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::BoolResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -717,7 +717,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanGetCoolerPower::handle
 	}
 
 	pResponseBody->setValue(pCamera->getCanGetCoolerPower());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -731,6 +730,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanPulseGuide::handleRequ
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::BoolResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -748,7 +748,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanPulseGuide::handleRequ
 	}
 
 	pResponseBody->setValue(pCamera->getCanPulseGuide());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -762,6 +761,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanSetCCDTemp::handleRequ
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::BoolResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -779,7 +779,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanSetCCDTemp::handleRequ
 	}
 
 	pResponseBody->setValue(pCamera->getCanSetCCDTemp());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -793,6 +792,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanStopExposure::handleRe
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::BoolResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -810,7 +810,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CanStopExposure::handleRe
 	}
 
 	pResponseBody->setValue(pCamera->getCanStopExposure());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -824,6 +823,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CCDTemp::handleRequest_Ge
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::DoubleResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -841,7 +841,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CCDTemp::handleRequest_Ge
 	}
 
 	pResponseBody->setValue(pCamera->getCCDTemp());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -855,6 +854,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerOn::handleRequest_G
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::BoolResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -872,7 +872,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerOn::handleRequest_G
 	}
 
 	pResponseBody->setValue(pCamera->getCoolerOn());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -886,6 +885,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerOn::handleRequest_P
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::MethodResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -920,7 +920,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerOn::handleRequest_P
 	}
 
 	pCamera->setCoolerOn(coolerOn);
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -934,6 +933,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerPower::handleReques
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::DoubleResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -951,7 +951,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerPower::handleReques
 	}
 
 	pResponseBody->setValue(pCamera->getCoolerPower());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -965,6 +964,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ElectronsPerADU::handleRe
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::DoubleResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -982,7 +982,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ElectronsPerADU::handleRe
 	}
 
 	pResponseBody->setValue(pCamera->getElectrosPerAdu());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -996,6 +995,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ExposureMax::handleReques
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::DoubleResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1013,7 +1013,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ExposureMax::handleReques
 	}
 
 	pResponseBody->setValue(pCamera->getExposureMax());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -1027,6 +1026,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ExposureMin::handleReques
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::DoubleResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1044,7 +1044,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ExposureMin::handleReques
 	}
 
 	pResponseBody->setValue(pCamera->getExposureMin());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -1058,6 +1057,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ExposureResolution::handl
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::DoubleResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1075,7 +1075,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ExposureResolution::handl
 	}
 
 	pResponseBody->setValue(pCamera->getExposureResolution());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -1089,6 +1088,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_FastReadout::handleReques
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::BoolResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1106,7 +1106,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_FastReadout::handleReques
 	}
 
 	pResponseBody->setValue(pCamera->getFastReadout());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -1120,6 +1119,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_FastReadout::handleReques
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::MethodResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1161,8 +1161,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_FastReadout::handleReques
 	}
 	
 	pCamera->setFastReadout(fastReadout);
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -1175,6 +1173,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Gain::handleRequest_Get(s
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1192,8 +1191,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Gain::handleRequest_Get(s
 	}
 
 	pResponseBody->setValue(pCamera->getGain());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -1206,6 +1203,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Gain::handleRequest_Put(s
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::MethodResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1246,7 +1244,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Gain::handleRequest_Put(s
 	}
 
 	pCamera->setGain(gain);
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -1260,6 +1257,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_GainMax::handleRequest_Ge
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1277,7 +1275,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_GainMax::handleRequest_Ge
 	}
 
 	pResponseBody->setValue(pCamera->getGainMax());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -1291,6 +1288,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_GainMin::handleRequest_Ge
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1308,7 +1306,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_GainMin::handleRequest_Ge
 	}
 
 	pResponseBody->setValue(pCamera->getGainMin());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -1322,6 +1319,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Gains::handleRequest_Get(
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::StringArrayResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1339,7 +1337,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Gains::handleRequest_Get(
 	}
 
 	pResponseBody->setValue(pCamera->getGains());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -1353,6 +1350,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_HasShutter::handleRequest
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::BoolResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1370,7 +1368,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_HasShutter::handleRequest
 	}
 
 	pResponseBody->setValue(pCamera->getHasShutter());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -1384,6 +1381,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_HeatSinkTemp::handleReque
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::DoubleResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1401,7 +1399,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_HeatSinkTemp::handleReque
 	}
 
 	pResponseBody->setValue(pCamera->getHeatsinkTemp());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -1415,6 +1412,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ImageArray::handleRequest
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::ImageResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1454,8 +1452,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ImageArray::handleRequest
 	pResponseBody->setType(type);
 
 	pResponseBody->setImageData(pCamera->getImageArray());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -1527,6 +1523,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ImageReady::handleRequest
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::BoolResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1544,8 +1541,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ImageReady::handleRequest
 	}
 
 	pResponseBody->setValue(pCamera->getImageReady());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -1558,6 +1553,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_IsPulseGuiding::handleReq
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::BoolResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1575,8 +1571,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_IsPulseGuiding::handleReq
 	}
 
 	pResponseBody->setValue(pCamera->getIsPulseGuiding());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -1589,6 +1583,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_LastExposureDuration::han
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::DoubleResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1614,8 +1609,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_LastExposureDuration::han
 	}
 
 	pResponseBody->setValue(lastDuration);
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -1628,6 +1621,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_LastExposureStartTime::ha
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::StringResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1653,8 +1647,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_LastExposureStartTime::ha
 	}
 
 	pResponseBody->setValue(lastStartTime);
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -1667,6 +1659,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_MaxADU::handleRequest_Get
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1684,7 +1677,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_MaxADU::handleRequest_Get
 	}
 
 	pResponseBody->setValue(pCamera->getMaxADU());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -1698,6 +1690,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_MaxBinX::handleRequest_Ge
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1715,8 +1708,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_MaxBinX::handleRequest_Ge
 	}
 
 	pResponseBody->setValue(pCamera->getMaxBinX());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -1729,6 +1720,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_MaxBinY::handleRequest_Ge
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1746,7 +1738,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_MaxBinY::handleRequest_Ge
 	}
 
 	pResponseBody->setValue(pCamera->getMaxBinY());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -1760,6 +1751,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumX::handleRequest_Get(s
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1775,10 +1767,8 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumX::handleRequest_Get(s
 	{
 		pResponseBody->setClientTransactionID(++transactionID);
 	}
-
-	pResponseBody->setValue(pCamera->getNumX());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
+	auto subframeX = pCamera->getNumX();
+	pResponseBody->setValue(subframeX);
 	return pResponseBody;
 }
 
@@ -1791,6 +1781,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumX::handleRequest_Put(s
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::MethodResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1829,7 +1820,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumX::handleRequest_Put(s
 		}
 	}
 
-	if (numX <= 0 || numX > pCamera->getCameraXSize())
+	if (numX <= 0 || numX > pCamera->getCameraXSize() / pCamera->getBinX())
 	{
 		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
 		pResponseBody->setErrorMessage("Invalid Value Supplied: Subframe X value out of bounds");
@@ -1837,7 +1828,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumX::handleRequest_Put(s
 	}
 
 	pCamera->setNumX(numX);
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -1851,6 +1841,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumY::handleRequest_Get(s
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1867,8 +1858,8 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumY::handleRequest_Get(s
 		pResponseBody->setClientTransactionID(++transactionID);
 	}
 
-	pResponseBody->setValue(pCamera->getNumY());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
+	auto subframeY = pCamera->getNumY();
+	pResponseBody->setValue(subframeY);
 
 	return pResponseBody;
 }
@@ -1882,6 +1873,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumY::handleRequest_Put(s
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::MethodResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1920,7 +1912,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumY::handleRequest_Put(s
 		}
 	}
 
-	if (numY <= 0 || numY > pCamera->getCameraYSize())
+	if (numY <= 0 || numY > pCamera->getCameraYSize() / pCamera->getBinY())
 	{
 		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
 		pResponseBody->setErrorMessage("Invalid Value Supplied: Subframe X value out of bounds");
@@ -1928,8 +1920,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_NumY::handleRequest_Put(s
 	}
 
 	pCamera->setNumY(numY);
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -1942,6 +1932,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Offset::handleRequest_Get
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -1959,8 +1950,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Offset::handleRequest_Get
 	}
 
 	pResponseBody->setValue(pCamera->getOffset());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -1973,6 +1962,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Offset::handleRequest_Put
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::MethodResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2013,7 +2003,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Offset::handleRequest_Put
 	}
 
 	pCamera->setOffset(offset);
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -2027,6 +2016,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_OffsetMin::handleRequest_
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2044,8 +2034,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_OffsetMin::handleRequest_
 	}
 
 	pResponseBody->setValue(pCamera->getOffsetMin());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -2058,6 +2046,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_OffsetMax::handleRequest_
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2075,8 +2064,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_OffsetMax::handleRequest_
 	}
 
 	pResponseBody->setValue(pCamera->getOffsetMax());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -2089,6 +2076,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Offsets::handleRequest_Ge
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::StringArrayResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2106,8 +2094,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_Offsets::handleRequest_Ge
 	}
 
 	pResponseBody->setValue(pCamera->getOffsets());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -2120,6 +2106,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PercentComplete::handleRe
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2137,8 +2124,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PercentComplete::handleRe
 	}
 
 	pResponseBody->setValue(pCamera->getPercentComplete());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -2151,6 +2136,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PixelSizeX::handleRequest
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::DoubleResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2168,8 +2154,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PixelSizeX::handleRequest
 	}
 
 	pResponseBody->setValue(pCamera->getPixelSizeX());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -2182,6 +2166,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PixelSizeY::handleRequest
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::DoubleResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2199,8 +2184,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PixelSizeY::handleRequest
 	}
 
 	pResponseBody->setValue(pCamera->getPixelSizeY());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -2213,6 +2196,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_FullWellCapacity::handleR
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2230,8 +2214,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_FullWellCapacity::handleR
 	}
 
 	pResponseBody->setValue(pCamera->getFullWellCapacity());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -2244,6 +2226,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ReadoutMode::handleReques
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2261,8 +2244,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ReadoutMode::handleReques
 	}
 
 	pResponseBody->setValue(pCamera->getReadoutMode());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -2275,6 +2256,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ReadoutMode::handleReques
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::MethodResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2317,8 +2299,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ReadoutMode::handleReques
 	}
 
 	pCamera->setReadoutMode(mode);
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -2331,6 +2311,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ReadoutModes::handleReque
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::StringArrayResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2348,8 +2329,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_ReadoutModes::handleReque
 	}
 
 	pResponseBody->setValue(pCamera->getReadoutModes());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -2362,6 +2341,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_SensorName::handleRequest
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::StringResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2379,8 +2359,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_SensorName::handleRequest
 	}
 
 	pResponseBody->setValue(pCamera->getSensorName());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -2393,6 +2371,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_SensorType::handleRequest
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2412,7 +2391,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_SensorType::handleRequest
 	auto type = static_cast<int>(pCamera->getSensorType());
 
 	pResponseBody->setValue(type);
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -2426,6 +2404,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerSetpoint::handleReq
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::DoubleResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2443,8 +2422,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerSetpoint::handleReq
 	}
 
 	pResponseBody->setValue(pCamera->getCoolerSetpoint());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -2457,6 +2434,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerSetpoint::handleReq
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::MethodResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2493,7 +2471,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_CoolerSetpoint::handleReq
 	{
 		pCamera->setCoolerSetpoint(setpoint);
 	}
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -2508,6 +2485,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartX::handleRequest_Get
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2524,9 +2502,8 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartX::handleRequest_Get
 		pResponseBody->setClientTransactionID(++transactionID);
 	}
 
-	pResponseBody->setValue(pCamera->getStartX());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
+	auto startX = pCamera->getStartX() / pCamera->getBinY();
+	pResponseBody->setValue(startX);
 	return pResponseBody;
 }
 
@@ -2539,6 +2516,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartX::handleRequest_Put
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::MethodResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2571,7 +2549,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartX::handleRequest_Put
 		}
 	}
 
-	if (startX < 0 || startX > pCamera->getCameraXSize())
+	if (startX < 0 || startX >= pCamera->getCameraXSize() / pCamera->getBinX())
 	{
 		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
 		pResponseBody->setErrorMessage("Invalid Value Supplied: Start X value out of bounds");
@@ -2579,8 +2557,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartX::handleRequest_Put
 	}
 
 	pCamera->setStartX(startX);
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartY::handleRequest_Get(std::string target, ParameterMap queries, ParameterMap body, TRESTCtxPtr pCtx)
@@ -2592,6 +2568,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartY::handleRequest_Get
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2608,9 +2585,8 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartY::handleRequest_Get
 		pResponseBody->setClientTransactionID(++transactionID);
 	}
 
-	pResponseBody->setValue(pCamera->getStartY());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
+	auto startY = pCamera->getStartY() / pCamera->getBinY();
+	pResponseBody->setValue(startY);
 	return pResponseBody;
 }
 
@@ -2623,6 +2599,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartY::handleRequest_Put
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::MethodResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2655,17 +2632,14 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartY::handleRequest_Put
 		}
 	}
 
-	if (startY < 0 || startY > pCamera->getCameraYSize())
+	if (startY < 0 || startY >= pCamera->getCameraYSize() / pCamera->getBinY())
 	{
 		pResponseBody->setErrorNumber(ErrorCodes::c_invalidValue);
 		pResponseBody->setErrorMessage("Invalid Value Supplied: Start X value out of bounds");
 		return pResponseBody;
 	}
 
-
 	pCamera->setStartY(startY);
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -2678,6 +2652,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_SubExposureDuration::hand
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::IntResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2695,7 +2670,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_SubExposureDuration::hand
 	}
 
 	pResponseBody->setValue(pCamera->getSubExposureDuration());
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -2709,6 +2683,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_SubExposureDuration::hand
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::MethodResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2749,8 +2724,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_SubExposureDuration::hand
 	}
 
 	pCamera->setSubExposureDuration(subExposureDuration);
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -2763,6 +2736,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_AbortExposure::handleRequ
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::MethodResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2794,8 +2768,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_AbortExposure::handleRequ
 	}
 
 	pCamera->abortExposure();
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
-
 	return pResponseBody;
 }
 
@@ -2808,6 +2780,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PulseGuide::handleRequest
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::MethodResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2883,7 +2856,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_PulseGuide::handleRequest
 	}
 
 	pCamera->pulseGuide(pulseGuideDirection, pulseGuideDuration);
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }
@@ -2897,6 +2869,7 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartExposure::handleRequ
 	}
 
 	auto pResponseBody = std::make_shared<Bodies::MethodResponse>();
+	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	auto deviceNum = extractDeviceNum(target);
 	if (deviceNum < 0)
@@ -2958,7 +2931,6 @@ std::shared_ptr<JSONInfoBody> Alpaca::Camera::Endpoint_StartExposure::handleRequ
 	}
 
 	pCamera->startExposure(duration, isLight);
-	pResponseBody->setServerTransactionID(pCamera->getNextransactionID());
 
 	return pResponseBody;
 }

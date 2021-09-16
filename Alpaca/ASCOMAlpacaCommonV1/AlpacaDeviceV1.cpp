@@ -4,6 +4,8 @@
 #include <map>
 #include <sstream>
 
+using namespace Alpaca;
+
 const std::map<AlpacaDeviceV1::DeviceTypeID, std::string> c_deviceTypeIDStrings = {
 		{ AlpacaDeviceV1::DeviceTypeID::Camera,				 "camera" },
 		{ AlpacaDeviceV1::DeviceTypeID::CoverCalibrator,	 "covercalibrator"},

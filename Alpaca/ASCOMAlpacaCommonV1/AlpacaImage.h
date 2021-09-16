@@ -18,14 +18,15 @@ namespace Image  {
 
 	class Buffer
 	{
-		union VarData
+	public:
+		union VarPixel
 		{
 			short  i16;
 			int    i32;
 			double f64;
 		};
 
-		DEVICEPROP(VarData*,  Data,    pData)
+		DEVICEPROP(VarPixel*,  Data,    pData)
 		DEVICEPROP(uint32_t,  Length,  length)
 		DEVICEPROP(ImageType, Type,    type)
 	public:
@@ -35,7 +36,7 @@ namespace Image  {
 		{}
 
 		Buffer(uint32_t len, ImageType type)
-			: m_pData(new VarData[len])
+			: m_pData(new VarPixel[len])
 			, m_length(len)
 			, m_type(type)
 		{}
@@ -63,7 +64,7 @@ namespace Image  {
 		void reset(unsigned int newLen)
 		{
 			reset();
-			m_pData = new VarData[newLen];
+			m_pData = new VarPixel[newLen];
 			m_length = newLen;
 		}
 
@@ -149,9 +150,16 @@ namespace Image  {
 			if (m_planes.empty()) return false;
 			for (ImagePlane& plane : m_planes)
 			{
-				if (!plane.isValid()) return false;                            // plane buffer must exist and nuffer length must be > 0
-				if (plane.getImageBuffer()->getLength() != len)  return false; // plane lengths must match
-				if (plane.getImageBuffer()->getType() != m_type) return false; // plane types must match
+				// plane buffer must exist and buffer length must be > 0
+				if (!plane.isValid()) return false; 
+
+				// plane lengths must match
+				auto planLen = plane.getImageBuffer()->getLength();
+				if (planLen != len)  return false; 
+
+				// plane types must match
+				auto planeImgType = plane.getImageBuffer()->getType();
+				if (planeImgType != m_type) return false; 
 			}
 			return true;
 		}

@@ -34,23 +34,21 @@ App::CameraSimApp::~CameraSimApp()
 
 bool CameraSimApp::init()
 {
+	m_pServer = std::make_shared<CamServer::CameraServer>();
+
+	// create and devices and register them as server contexts
 	auto pCam = std::make_shared<Camera::CameraV1>(0);
-	auto pServer = std::make_shared<CamServer::CameraServer>(pCam);
+	m_pServer->registerContext(pCam);
 
 	// init the state machine for the camera
+	m_pMainFrame = std::make_shared<Gui::DlgMainFrame>(m_pServer);
+	m_pMainFrame->show();
 
-	auto pMF = std::make_shared<Gui::DlgMainFrame>(pServer);
-	pMF->show();
+	m_pCameraStateMachine = std::make_shared<SM::CameraStateMachine>(pCam);
 
-	auto pCamStateMachine = std::make_shared<SM::CameraStateMachine>(pCam);
-
+	// check for command line args here
 	auto args = arguments();
-
-	pCamStateMachine->enableStateHistory(args.contains("-dumpstates"));
-
-	m_pServer = pServer;
-	m_pCameraStateMachine = pCamStateMachine;
-	m_pMainFrame = pMF;
+	m_pCameraStateMachine->enableStateHistory(args.contains("-dumpstates"));
 
 	return true;
 }

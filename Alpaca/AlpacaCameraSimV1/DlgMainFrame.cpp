@@ -21,7 +21,14 @@ DlgMainFrame::DlgMainFrame(CamServerPtr pServer, QWidget *parent)
 {
 	ui.setupUi(this);
 
-	pServer->getCamera()->registerView(this);
+	for (auto& pDevice : pServer->getContexts())
+	{
+		auto pModel = std::dynamic_pointer_cast<Model::DeviceModel>(pDevice);
+		if (pModel)
+		{
+			pModel->registerView(this);
+		}
+	}
 
 	initSlots();
 
