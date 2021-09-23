@@ -18,15 +18,21 @@ DlgMainFrame::DlgMainFrame(CamServerPtr pServer, QWidget *parent)
 	, m_privKeyPathHistory("")
 	, m_encryptionParamsPathHistory("")
 	, m_statusString("")
+	, m_deviceStatusMap()
 {
 	ui.setupUi(this);
 
-	for (auto& pDevice : pServer->getContexts())
+	for (auto& pCtx : pServer->getContexts())
 	{
-		auto pModel = std::dynamic_pointer_cast<Model::DeviceModel>(pDevice);
+		auto pModel = std::dynamic_pointer_cast<Model::DeviceModel>(pCtx);
 		if (pModel)
 		{
 			pModel->registerView(this);
+
+			auto pDevice = std::dynamic_pointer_cast<Alpaca::AlpacaDeviceV1>(pCtx);
+			if (!pDevice) continue;
+
+			onUpdateDeviceRegistered(pDevice->getDeviceID(), QString::fromStdString(pDevice->getName()));
 		}
 	}
 
@@ -55,7 +61,7 @@ void Gui::DlgMainFrame::update(const Hint::HintBase& hint)
 		auto pHint = dynamic_cast<const UpdateCamStatusHint*>(&hint);
 		if (pHint)
 		{
-			emit CamStatusUpdated(QString::fromStdString(pHint->m_Data));
+			emit CamStatusUpdated(pHint->m_Data.first, QString::fromStdString(pHint->m_Data.second));
 		}
 		break;
 	}
@@ -65,6 +71,15 @@ void Gui::DlgMainFrame::update(const Hint::HintBase& hint)
 		if (pHint)
 		{
 			emit ServerStatusUpdated(QString::fromStdString(pHint->m_Data));
+		}
+		break;
+	}
+	case HintBase::HintID::RegisterDeviceToGui:
+	{
+		auto pHint = dynamic_cast<const RegisterDeviceToGuiHint*>(&hint);
+		if (pHint)
+		{
+			emit DeviceRegistered(pHint->m_Data.first, QString::fromStdString(pHint->m_Data.second));
 		}
 		break;
 	}
@@ -100,8 +115,9 @@ void DlgMainFrame::initSlots()
 		&QPushButton::clicked, this,
 		&DlgMainFrame::onStopServer);
 
-	connect(this, SIGNAL(CamStatusUpdated(QString)), this, SLOT(onUpdateCamStatus(QString)));
-	connect(this, SIGNAL(CamStatusUpdated(QString)), this, SLOT(onUpdateCamStatus(QString)));
+	connect(this, SIGNAL(CamStatusUpdated(unsigned int,QString)),          this, SLOT(onUpdateCamStatus(unsigned int,QString)));
+	connect(this, SIGNAL(ServerStatusUpdated(QString)),                    this, SLOT(onUpdateServerStatus(QString)));
+	connect(this, SIGNAL(DeviceRegistered(unsigned int, QString)),         this, SLOT(onUpdateDeviceRegistered(unsigned int,QString)));
 }
 
 void DlgMainFrame::loadSettings()
@@ -122,8 +138,6 @@ void DlgMainFrame::loadSettings()
 	m_encryptionParamsPathHistory	 = settings.value("PathHistory_EncryptionParam", "").toString();
 
 	settings.endGroup();
-
-
 }
 
 void DlgMainFrame::saveSettings()
@@ -190,16 +204,45 @@ void DlgMainFrame::onStopServer()
 	enableButtonControls(true);
 }
 
-void DlgMainFrame::onUpdateCamStatus(QString msg)
+void DlgMainFrame::onUpdateCamStatus(unsigned int name, QString msg)
 {
 	m_statusString = msg;
-	ui.CameraStatusEdit->setPlainText(msg);
+	if (m_deviceStatusMap.find(name) != m_deviceStatusMap.end())
+	{
+		auto data = m_deviceStatusMap.at(name);
+		data.pEdit->setText(msg);
+	}
+	//ui.CameraStatusEdit->setPlainText(msg);
 }
 
 void Gui::DlgMainFrame::onUpdateServerStatus(QString msg)
 {
 	m_statusString = msg;
 	ui.ServerStatusEdit->setPlainText(msg);
+}
+
+void Gui::DlgMainFrame::onUpdateDeviceRegistered(unsigned int id, QString name)
+{
+	// We don't want to add another entry with the same name
+	if (m_deviceStatusMap.find(id) == m_deviceStatusMap.end())
+	{
+		// create the structure that will hold our status lable and edit
+		DeviceWidget deviceStatus;
+		deviceStatus.pLabel = std::make_shared<QLabel>(this);
+		deviceStatus.pEdit  = std::make_shared<QTextEdit>(this);
+
+		// add it to the map 
+		m_deviceStatusMap.insert_or_assign(id, deviceStatus);
+
+		ui.DeviceStatus->layout()->addWidget(deviceStatus.pLabel.get());
+		ui.DeviceStatus->layout()->addWidget(deviceStatus.pEdit.get());
+
+		auto prettyName = name.replace('_', ' ');
+		deviceStatus.pLabel->setText(prettyName);
+		deviceStatus.pLabel->show();
+		deviceStatus.pEdit->show();
+		deviceStatus.pEdit->setReadOnly(true);
+	}
 }
 
 void DlgMainFrame::onActionFile_Close()

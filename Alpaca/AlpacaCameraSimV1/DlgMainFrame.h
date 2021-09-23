@@ -2,6 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <qmap.h>
+#include <qscopedpointer.h>
+#include <qlabel.h>
+#include <qtextedit.h>
 #include "ui_DlgMainFrame.h"
 
 #include "CameraV1.h"
@@ -33,6 +37,17 @@ public:
 private:
 	Ui::DlgMainFrame ui;
 
+	using QLabelPtr    = std::shared_ptr<QLabel>;
+	using QTextEditPtr = std::shared_ptr<QTextEdit>;
+
+	struct DeviceWidget 
+	{
+		QLabelPtr    pLabel;
+		QTextEditPtr pEdit;
+	};
+	std::map<unsigned int, DeviceWidget> m_deviceStatusMap;
+	
+
 	void initSlots();
 	void loadSettings();
 	void saveSettings();
@@ -49,11 +64,14 @@ public slots:
 	void onActionFile_Close();
 	void onActionServer_Settings();
 
-	void onUpdateCamStatus(QString msg);
+	void onUpdateCamStatus(unsigned int name, QString msg);
 	void onUpdateServerStatus(QString msg);
+	void onUpdateDeviceRegistered(unsigned int id, QString name);
+
 signals:
-	void CamStatusUpdated(QString);
+	void CamStatusUpdated(unsigned int, QString);
 	void ServerStatusUpdated(QString);
+	void DeviceRegistered(unsigned int id, QString name);
 };
 typedef std::shared_ptr<DlgMainFrame> AppGuiPtr;
 }

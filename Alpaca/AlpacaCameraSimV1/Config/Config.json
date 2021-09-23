@@ -1,0 +1,11 @@
+{
+    "Server_Config": {
+        "Certificate_Path": "",
+        "DH_Params_Path": "",
+        "Enable_HTTPS": false,
+        "IPv4": "127.0.0.1",
+        "Port": 8080,
+        "Priv_Key_Path": "",
+        "Server_Thread_Count": 1
+    }
+}

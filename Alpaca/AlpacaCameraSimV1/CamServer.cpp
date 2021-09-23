@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "CamServer.h"
+#include <fstream>
+#include <iomanip>
 
 using namespace CamServer;
 
@@ -13,7 +15,9 @@ bool CameraServer::start(ServerConfigurationData& info)
 
 	m_pInfo->setServerName("Alpaca Camera Simulator Server");
 	m_pInfo->setAPIVer(1.0);
-	m_pInfo->setIdleTimeout(300u); // 5 min timeout
+	m_pInfo->setIdleTimeout(UINT32_MAX); // 5 min timeout
+	m_pInfo->getURI()->setAddress(info.IPv4Address);
+	m_pInfo->getURI()->setPort(info.port);
 
 	auto& endpointList = m_pInfo->getEndpointNames();
 	endpointList.clear();
@@ -80,7 +84,8 @@ bool CameraServer::start(ServerConfigurationData& info)
 		m_lastServerError = "Could not start server: " + reasonStr;
 		return false;
 	}
-	setConfigData(info);
+	m_pInfo->setState(ServerInfoBody::ServerStatus::Listening);
+	saveConfigToFile(info);
 	return true;
 }
 
@@ -88,4 +93,27 @@ bool CameraServer::stop()
 {
 	reset();
 	return true;
+}
+
+void CamServer::CameraServer::saveConfigToFile(ServerConfig& config)
+{
+	JSON serverInfo = JSON::object();
+
+	serverInfo["Port"] = config.port;
+	serverInfo["IPv4"] = config.IPv4Address;
+	serverInfo["Certificate_Path"] = config.certificateFilePath;
+	serverInfo["Priv_Key_Path"] = config.privKeyFilePath;
+	serverInfo["DH_Params_Path"] = config.diffieHellmanParamFilePath;
+	serverInfo["Enable_HTTPS"] = config.useHTTPS;
+	serverInfo["Server_Thread_Count"] = config.serverThreadCount;
+
+	JSON info = JSON::object();
+	info["Server_Config"] = serverInfo;
+
+	std::ofstream configFile;
+	configFile.open(c_workingConfigPath, std::fstream::trunc);
+	if (!configFile.is_open()) return;
+
+	configFile << std::setw(4) << info << std::endl;
+	setConfigData(config);
 }

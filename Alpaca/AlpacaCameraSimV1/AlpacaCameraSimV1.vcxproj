@@ -31,14 +31,14 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
-    <QtInstall>5.15.2</QtInstall>
+    <QtInstall>6.1.3</QtInstall>
     <QtModules>core;widgets;qml;quick</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
     <QtDeploy>true</QtDeploy>
     <QMakeExtraArgs>$(QMakeExtraArgs)</QMakeExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
-    <QtInstall>5.15.2</QtInstall>
+    <QtInstall>6.1.3</QtInstall>
     <QtModules>core;widgets;qml;quick</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
@@ -142,11 +142,11 @@
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Config.json" />
-  </ItemGroup>
-  <ItemGroup>
     <QtUic Include="DlgMainFrame.ui" />
     <QtUic Include="DlgServerSetup.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Config\Config.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

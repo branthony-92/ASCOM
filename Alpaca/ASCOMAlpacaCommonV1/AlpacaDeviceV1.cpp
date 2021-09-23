@@ -32,7 +32,12 @@ AlpacaDeviceV1::AlpacaDeviceV1(DeviceTypeID type, unsigned int deviceNum, std::s
 	, m_deviceType(type)
 	, m_deviceNumber(deviceNum)
 	, m_deviceBusy(false)
+	, m_deviceID(-1)
 {
+	// each device id will exist in an ID space by taking the binary and of the device num and the device type
+	// eg: a cam with device num 1 will be 0 | 0x1000 and such will have an id of 0x1001 where as a telescope with a device of
+	// 0 will have a an id of 1 | 0x9000 which will be 0x9001 allowing devices to be enumerated via the device space of the id 
+	m_deviceID = static_cast<unsigned int>(m_deviceType) | deviceNum;
 	initCommonEndpoints();
 }
 

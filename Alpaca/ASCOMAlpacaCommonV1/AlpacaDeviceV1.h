@@ -11,16 +11,18 @@ class AlpacaDeviceV1 : public RESTServerContext
 public:
 	enum class DeviceTypeID
 	{
-		Camera,
-		CoverCalibrator,
-		Dome, 
-		FilterWheel,
-		Focuser, 
-		ObservingConditions,
-		Rotator,
-		SafetyMonitor,
-		Switch,
-		Telescope,
+		// tshee can be useful in the even that some class has ownership of multiple devices and may 
+		// want to identify by device num but a scope and a cam can both have a device num of 0 or something
+		Camera                = 0x100,
+		CoverCalibrator       = 0x200,
+		Dome  				  = 0x300,
+		FilterWheel 		  = 0x400,
+		Focuser  			  = 0x500,
+		ObservingConditions   = 0x600,
+		Rotator 			  = 0x700,
+		SafetyMonitor 		  = 0x800,
+		Switch 				  = 0x900,
+		Telescope			  = 0xA00,
 
 		NumDeviceTypes,
 	};
@@ -38,6 +40,7 @@ public:
 	DEVICEPROP(std::string,  RootEPName,   rootEPName)
 	DEVICEPROP(DeviceTypeID, DeviceType,   deviceType)
 	DEVICEPROP(unsigned int, DeviceNumber, deviceNumber)
+	DEVICEPROP(unsigned int, DeviceID,     deviceID)
 
 	DEVICEPROP(bool, DeviceBusy, deviceBusy)
 

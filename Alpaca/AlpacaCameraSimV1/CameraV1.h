@@ -20,7 +20,7 @@ class CameraV1
 	DEVICEPROP(Alpaca::Image::ImageType, ImageType, imageType);
 
 public:
-	CameraV1(unsigned int deviceIndex);
+	CameraV1(unsigned int deviceIndex, std::string name);
 	virtual ~CameraV1();
 
 	// Server context Overrides

@@ -8,6 +8,7 @@ namespace Hint {
 		{
 			UpdateCameraStatus,
 			UpdateServerStatus,
+			RegisterDeviceToGui,
 		};
 
 		HintBase(HintID id)
@@ -29,8 +30,11 @@ namespace Hint {
 		const DataType& m_Data;
 	};
 
-	typedef DeviceViewHint<std::string, HintBase::HintID::UpdateCameraStatus>  UpdateCamStatusHint;
-	typedef DeviceViewHint<std::string, HintBase::HintID::UpdateServerStatus>  UpdateServertatusHint;
+	typedef std::pair<unsigned int, std::string> DeviceViewData;
+
+	typedef DeviceViewHint<std::string, HintBase::HintID::UpdateServerStatus>	  UpdateServertatusHint;
+	typedef DeviceViewHint<DeviceViewData, HintBase::HintID::UpdateCameraStatus>  UpdateCamStatusHint;
+	typedef DeviceViewHint<DeviceViewData, HintBase::HintID::RegisterDeviceToGui>    RegisterDeviceToGuiHint;
 }
 
 namespace View {

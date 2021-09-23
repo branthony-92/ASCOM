@@ -8,9 +8,9 @@ using namespace Camera::Event;
 
 const std::string c_resourceRoot = "C:\\Users\\xs_br\\source\\repos\\branthony-92\\ASCOM\\Alpaca\\AlpacaCameraSimV1";
 
-CameraV1::CameraV1(unsigned int deviceIndex)
-	: IAlpacaCamV1(deviceIndex, "Alpaca_Camera_Simulator_V1")
-	, CSMStateContext("Alpaca_Camera_Simulator_V1")
+CameraV1::CameraV1(unsigned int deviceIndex, std::string name)
+	: IAlpacaCamV1(deviceIndex, name)
+	, CSMStateContext(name)
 	, m_generateBackground(true)
 	, m_bufferReadOffset(0)
 	, m_imageType(Alpaca::Image::ImageType::Int32)
@@ -108,7 +108,7 @@ void CameraV1::startExposure(double duration, bool isLight)
 	m_cameraState = Alpaca::Camera::CameraStateID::CameraExposing;
 
 	std::string status = "Camera Connected - Exposing...";
-	updateViews(Hint::UpdateCamStatusHint(status));
+	updateViews(Hint::UpdateCamStatusHint(Hint::DeviceViewData(getDeviceID(), status)));
 }
 
 void CameraV1::stopExposure()
@@ -120,14 +120,14 @@ void CameraV1::abortExposure()
 {
 	postEvent(create<EventID::CamEvent_AbortExposure>());
 	std::string status = "Camera Connected - Aborting Exposure...";
-	updateViews(Hint::UpdateCamStatusHint(status));
+	updateViews(Hint::UpdateCamStatusHint(Hint::DeviceViewData(getDeviceID(), status)));
 }
 
 void CameraV1::pulseGuide(Alpaca::Camera::PulseGuideDirection direction, int duration)
 {
 	postEvent(create<EventID::CamEvent_PulseGuide>());
 	std::string status = "Camera Connected - Pulse Guiding...";
-	updateViews(Hint::UpdateCamStatusHint(status));
+	updateViews(Hint::UpdateCamStatusHint(Hint::DeviceViewData(getDeviceID(), status)));
 }
 
 void Camera::CameraV1::connect()
@@ -135,7 +135,7 @@ void Camera::CameraV1::connect()
 	if (!m_connected)
 	{
 		std::string status = "Camera Connecting...";
-		updateViews(Hint::UpdateCamStatusHint(status));
+		updateViews(Hint::UpdateCamStatusHint(Hint::DeviceViewData(getDeviceID(), status)));
 		postEvent(Event::create<EventID::CamEvent_Connect>());
 	}
 }
@@ -144,7 +144,7 @@ void Camera::CameraV1::setupCamera()
 {
 	postEvent(Event::create<EventID::CamEvent_Success>());
 	std::string status = "Camera Connected";
-	updateViews(Hint::UpdateCamStatusHint(status));
+	updateViews(Hint::UpdateCamStatusHint(Hint::DeviceViewData(getDeviceID(), status)));
 	m_connected = true;
 }
 
@@ -154,7 +154,7 @@ void Camera::CameraV1::disconnect()
 	{
 		postEvent(Event::create<EventID::CamEvent_Disconnect>());
 		std::string status = "Camera Disconnecting...";
-		updateViews(Hint::UpdateCamStatusHint(status));
+		updateViews(Hint::UpdateCamStatusHint(Hint::DeviceViewData(getDeviceID(), status)));
 	}
 }
 
@@ -162,7 +162,7 @@ void Camera::CameraV1::shutdownCamera()
 {
 	postEvent(Event::create<EventID::CamEvent_Success>());
 	std::string status = "Camera Not Connected";
-	updateViews(Hint::UpdateCamStatusHint(status));
+	updateViews(Hint::UpdateCamStatusHint(Hint::DeviceViewData(getDeviceID(), status)));
 	m_connected = false;
 }
 
@@ -179,14 +179,14 @@ void Camera::CameraV1::recoverState()
 void Camera::CameraV1::onStart()
 {
 	std::string status = "Camera Not Connected";
-	updateViews(Hint::UpdateCamStatusHint(status));
+	updateViews(Hint::UpdateCamStatusHint(Hint::DeviceViewData(getDeviceID(), status)));
 }
 
 void Camera::CameraV1::onIdle()
 {
 	setCameraState(Alpaca::Camera::CameraStateID::CameraIdle);
 	std::string status = "Camera Connected - Idle";
-	updateViews(Hint::UpdateCamStatusHint(status));
+	updateViews(Hint::UpdateCamStatusHint(Hint::DeviceViewData(getDeviceID(), status)));
 	m_percentComplete = 0;
 }
 
@@ -293,7 +293,7 @@ void Camera::CameraV1::generateImgBackground()
 	std::this_thread::sleep_for(std::chrono::seconds(delaySec));
 	m_cameraState = Alpaca::Camera::CameraStateID::CameraReading;
 	std::string status = "Camera Connected - Generating Simulated Image...";
-	updateViews(Hint::UpdateCamStatusHint(status));
+	updateViews(Hint::UpdateCamStatusHint(Hint::DeviceViewData(getDeviceID(), status)));
 
 	m_pImageArray = std::make_shared<Alpaca::Image::ImageData>();
 
@@ -527,7 +527,7 @@ void Camera::CameraV1::transferImage()
 {
 	m_cameraState = Alpaca::Camera::CameraStateID::CameraDownload;
 	std::string status = "Camera Connected - Transferring...";
-	updateViews(Hint::UpdateCamStatusHint(status));
+	updateViews(Hint::UpdateCamStatusHint(Hint::DeviceViewData(getDeviceID(), status)));
 }
 
 bool Camera::CameraV1::readChunk(uint32_t chunkSize)

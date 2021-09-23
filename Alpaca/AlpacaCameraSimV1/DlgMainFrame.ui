@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>320</width>
-    <height>319</height>
+    <width>351</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,26 +15,34 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0" colspan="2">
+    <item row="3" column="0">
+     <widget class="QPushButton" name="StartServerButton">
+      <property name="text">
+       <string>Start Server</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QPushButton" name="StopServerButton">
+      <property name="text">
+       <string>Stop Server</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0" colspan="2">
+     <widget class="QGroupBox" name="DeviceStatus">
+      <property name="title">
+       <string>Device Status</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2"/>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="2">
      <widget class="QGroupBox" name="groupBox_Status">
       <property name="title">
-       <string>Status</string>
+       <string>Server Status</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_5">
-       <item row="3" column="0">
-        <widget class="QTextEdit" name="CameraStatusEdit">
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Server</string>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="0">
         <widget class="QTextEdit" name="ServerStatusEdit">
          <property name="readOnly">
@@ -42,28 +50,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Camera</string>
-         </property>
-        </widget>
-       </item>
       </layout>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QPushButton" name="StartServerButton">
-      <property name="text">
-       <string>Start Server</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QPushButton" name="StopServerButton">
-      <property name="text">
-       <string>Stop Server</string>
-      </property>
      </widget>
     </item>
    </layout>
@@ -73,8 +60,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>320</width>
-     <height>21</height>
+     <width>351</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

@@ -7,11 +7,10 @@ using namespace SM;
 using namespace Camera;
 using namespace States;
 
-CameraStateMachine::CameraStateMachine(std::shared_ptr<CameraV1> pCam)
-	: CSMBase(0, "Alpaca Cam V1 SM", pCam)
+CameraStateMachine::CameraStateMachine(std::shared_ptr<CameraV1> pCam, std::string name)
+	: CSMBase(0, name, pCam)
 	, m_pCamera(pCam)
 {
-	initSM();
 }
 
 CameraStateMachine::~CameraStateMachine()
@@ -46,7 +45,7 @@ void SM::CameraStateMachine::initSM()
 
 	setErrorEvent(pErrorEvent);
 	setErrorState(m_stateTable[errorState]);
-
-	startSM(m_stateTable[firstState]);
+	setCurrentState(m_stateTable[firstState]);
+	m_smEnabled = true;
 }
 

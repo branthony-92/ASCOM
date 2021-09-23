@@ -6,6 +6,8 @@
 
 namespace CamServer {
 
+	const std::string c_workingConfigPath = "Config/Config.json";
+
 class CameraServer : public Server
 {
 public:
@@ -31,6 +33,8 @@ public:
 	bool start(ServerConfigurationData& info);
 	bool stop();
 
+	void saveConfigToFile(ServerConfigurationData& config);
+
 private:
 	SSLCtxInitHandler m_fHandler;
 
@@ -38,7 +42,7 @@ private:
 	DEVICEPROP(std::string,             LastError,   lastError)
 };
 typedef std::shared_ptr<CameraServer> CamServerPtr;
-
 }
+using ServerConfig = CamServer::CameraServer::ServerConfigurationData;
 
 #endif // !CAMSERVER_H
