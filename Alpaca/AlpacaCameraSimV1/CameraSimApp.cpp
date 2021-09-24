@@ -4,17 +4,20 @@
 
 using namespace App;
 
+
 #ifdef _WIN32 || _WIN64
 	bool isWindows = true;
 #else
 	bool isWindows = false;
 #endif
 
+
 const QList<QCommandLineOption> c_supportedOptions = {
 	QCommandLineOption("logsmstates", "Save the state machine states to a CSV file"),
-	QCommandLineOption("nogui", "Run the Application with the GUI enabled"),
+	QCommandLineOption("nogui", "Run the Application without the GUI enabled"),
 	QCommandLineOption("config", "Absolute path the to server configuration file", "Config")
 };
+
 
 App::CameraSimApp::CameraSimApp(int argc, char* argv[])
 	: QApplication(argc, argv)
@@ -47,9 +50,9 @@ App::CameraSimApp::~CameraSimApp()
 		
 		file.close();
 	}
+	m_pMainFrame      = nullptr;
 	m_pDeviceSMMaster = nullptr;
 	m_pServer		  = nullptr;
-	m_pMainFrame      = nullptr;
 }
 
 bool CameraSimApp::init()
@@ -78,28 +81,25 @@ bool CameraSimApp::init()
 
 	m_pServer = std::make_shared<CamServer::CameraServer>();
 
-	// init cam 1, register it to the server, and a new state machine, register this state machine to the manager
-	auto pCam1 = std::make_shared<Camera::CameraV1>(0, "Alpaca_Camera_Simulator_V1");
-	auto pCam1SM = std::make_shared<SM::CameraStateMachine>(pCam1, "Alpaca_Camera_Simulator_V1_1_SM");
-	m_pServer->registerContext(pCam1);
-	m_pDeviceSMMaster->registerStateMachine(pCam1SM);
+	// TODO : this logic should probably go into a controller class...
+	// open the config filepath
+	JSON config = jsonUtils::loadFile(CamServer::c_workingConfigPath);
 
-	// init cam 2, register it to the server, and a new state machine, register this state machine to the manager
-	auto pCam2 = std::make_shared<Camera::CameraV1>(1, "Alpaca_Camera_Simulator_V1");
-	auto pCam2SM = std::make_shared<SM::CameraStateMachine>(pCam2, "Alpaca_Camera_Simulator_V1_2_SM");
-	m_pServer->registerContext(pCam2);
-	m_pDeviceSMMaster->registerStateMachine(pCam2SM);
+	std::vector<JSON> devices = jsonUtils::extractValue<std::vector<JSON>>(config, "Device_List", std::vector<JSON>());
 
-	// init cam 3, register it to the server, and a new state machine, register this state machine to the manager
-	auto pCam3 = std::make_shared<Camera::CameraV1>(2, "Alpaca_Camera_Simulator_V1");
-	auto pCam3SM = std::make_shared<SM::CameraStateMachine>(pCam3, "Alpaca_Camera_Simulator_V1_3_SM");
-	m_pServer->registerContext(pCam3);
-	m_pDeviceSMMaster->registerStateMachine(pCam3SM);
-
-	if (m_parser.isSet("logsmstates"))
+	// initialize our devices using the config file
+	// this should be configurable via the gui using an "add device" button
+	for (auto& devInfo : devices)
 	{
-		pCam1SM->enableStateHistory(true);
+		DeviceData info;
+
+		info.deviceName = jsonUtils::extractValue<std::string>(devInfo, "Device_Name", "");
+		info.deviceType = jsonUtils::extractValue<std::string>(devInfo, "Device_Type", "");
+		info.deviceNum = jsonUtils::extractValue<int>(devInfo, "Device_Num", -1);
+		createDevice(info);
 	}
+
+	// Init the statemachine master
 	m_pDeviceSMMaster->startStateMachines();
 
 	// skip gui creation if we specify the -g (gui-less) flag
@@ -129,6 +129,55 @@ bool App::CameraSimApp::initWithoutGui()
 	return m_pServer->start(info);
 
 	return false;
+}
+
+void App::CameraSimApp::createDevice(DeviceData& data)
+{
+	if (data.deviceName.empty()) return;
+	if (data.deviceType.empty()) return;
+	if (data.deviceNum < 0)      return;
+
+	if (Alpaca::c_stringsToDeviceTypeID.find(data.deviceType) == Alpaca::c_stringsToDeviceTypeID.end()) return;
+	auto deviceID = Alpaca::c_stringsToDeviceTypeID.at(data.deviceType);
+
+	RESTCtxPtr pDevice   = nullptr;
+	TSMPtr     pDeviceSM = nullptr;
+
+	std::ostringstream oss;
+
+	switch (deviceID)
+	{
+	case Alpaca::DeviceTypeID::Camera:
+	{
+		// init cam 1, register it to the server, and a new state machine, register this state machine to the manager
+		auto pCam = std::make_shared<Camera::CameraV1>(data.deviceNum, data.deviceName);
+		oss << data.deviceName << " SM ID: " << pCam->getDeviceID();
+		pDeviceSM = std::make_shared<SM::CameraStateMachine>(pCam, oss.str());
+		pDevice = pCam;
+		break;
+	}
+	case Alpaca::DeviceTypeID::CoverCalibrator:
+	case Alpaca::DeviceTypeID::Dome:
+	case Alpaca::DeviceTypeID::FilterWheel:
+	case Alpaca::DeviceTypeID::Focuser:
+	case Alpaca::DeviceTypeID::ObservingConditions:
+	case Alpaca::DeviceTypeID::Rotator:
+	case Alpaca::DeviceTypeID::SafetyMonitor:
+	case Alpaca::DeviceTypeID::Switch:
+	case Alpaca::DeviceTypeID::Telescope:
+	default:
+		break;
+	}
+
+	if (!(pDevice && pDeviceSM)) return;
+	
+	m_pServer->registerContext(pDevice);
+	m_pDeviceSMMaster->registerStateMachine(pDeviceSM);
+
+	if (m_parser.isSet("logsmstates"))
+	{
+		pDeviceSM->enableStateHistory(true);
+	}
 }
 
 ServerConfig App::CameraSimApp::loadConfigFromFile(std::string filePath)

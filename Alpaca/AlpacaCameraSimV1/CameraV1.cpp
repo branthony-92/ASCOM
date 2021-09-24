@@ -40,7 +40,7 @@ void Camera::CameraV1::onServerReset()
 
 void Camera::CameraV1::onServerShutdown()
 {
-	disconnect();
+	shutdownCamera();
 }
 
 std::string Camera::CameraV1::findResource(std::string target)

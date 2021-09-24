@@ -11,6 +11,14 @@
 
 class QCommandLineParser;
 
+struct DeviceData
+{
+	std::string    deviceName;
+	std::string    deviceType;
+	int            deviceNum;
+};
+typedef std::list<DeviceData> DeviceDataList;
+
 namespace App {
 
 class CameraSimApp : public QApplication
@@ -26,6 +34,7 @@ public:
 	virtual ~CameraSimApp();
 	bool init();
 	bool initWithoutGui();
+	void createDevice(DeviceData&);
 
 	ServerConfig loadConfigFromFile(std::string file);
 };

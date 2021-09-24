@@ -97,8 +97,11 @@ bool CameraServer::stop()
 
 void CamServer::CameraServer::saveConfigToFile(ServerConfig& config)
 {
-	JSON serverInfo = JSON::object();
+	// try to load the file if one exists
+	JSON cfgJSON = jsonUtils::loadFile(c_workingConfigPath);
+	JSON serverInfo = jsonUtils::extractValue<JSON>(cfgJSON, "Server_Config", JSON::object());
 
+	// update the server info section
 	serverInfo["Port"] = config.port;
 	serverInfo["IPv4"] = config.IPv4Address;
 	serverInfo["Certificate_Path"] = config.certificateFilePath;
@@ -107,13 +110,12 @@ void CamServer::CameraServer::saveConfigToFile(ServerConfig& config)
 	serverInfo["Enable_HTTPS"] = config.useHTTPS;
 	serverInfo["Server_Thread_Count"] = config.serverThreadCount;
 
-	JSON info = JSON::object();
-	info["Server_Config"] = serverInfo;
+	cfgJSON["Server_Config"] = serverInfo;
 
 	std::ofstream configFile;
 	configFile.open(c_workingConfigPath, std::fstream::trunc);
 	if (!configFile.is_open()) return;
 
-	configFile << std::setw(4) << info << std::endl;
+	configFile << std::setw(4) << cfgJSON << std::endl;
 	setConfigData(config);
 }

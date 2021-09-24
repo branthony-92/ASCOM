@@ -6,18 +6,7 @@
 
 using namespace Alpaca;
 
-const std::map<AlpacaDeviceV1::DeviceTypeID, std::string> c_deviceTypeIDStrings = {
-		{ AlpacaDeviceV1::DeviceTypeID::Camera,				 "camera" },
-		{ AlpacaDeviceV1::DeviceTypeID::CoverCalibrator,	 "covercalibrator"},
-		{ AlpacaDeviceV1::DeviceTypeID::Dome,				 "dome"},
-		{ AlpacaDeviceV1::DeviceTypeID::FilterWheel,		 "filterwheel"},
-		{ AlpacaDeviceV1::DeviceTypeID::Focuser,			 "focuser"},
-		{ AlpacaDeviceV1::DeviceTypeID::ObservingConditions, "observingconditions"},
-		{ AlpacaDeviceV1::DeviceTypeID::Rotator,			 "rotator"},
-		{ AlpacaDeviceV1::DeviceTypeID::SafetyMonitor,		 "safetymonitor" },
-		{ AlpacaDeviceV1::DeviceTypeID::Switch,				 "switch" },
-		{ AlpacaDeviceV1::DeviceTypeID::Telescope,			 "telescope" }
-};
+
 
 AlpacaDeviceV1::AlpacaDeviceV1(DeviceTypeID type, unsigned int deviceNum, std::string deviceName)
 	: RESTServerContext(deviceName)
@@ -54,7 +43,7 @@ void AlpacaDeviceV1::initCommonEndpoints()
 		auto listStart = static_cast<unsigned int>(Alpaca::Common::CommonEndpointID::epFirst);
 		auto listEnd   = static_cast<unsigned int>(Alpaca::Common::CommonEndpointID::epLast);
 
-		std::string deviceTypeString = c_deviceTypeIDStrings.at(m_deviceType);
+		std::string deviceTypeString = c_deviceTypeIDToStrings.at(m_deviceType);
 
 		std::ostringstream oss;
 		oss << m_rootEPName << "/" << deviceTypeString << "/" << m_deviceNumber;

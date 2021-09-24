@@ -48,6 +48,14 @@ DlgMainFrame::DlgMainFrame(CamServerPtr pServer, QWidget *parent)
 
 DlgMainFrame::~DlgMainFrame()
 {
+	for (auto& pCtx : m_pCamServer->getContexts())
+	{
+		auto pModel = std::dynamic_pointer_cast<Model::DeviceModel>(pCtx);
+		if (pModel)
+		{
+			pModel->unregisterView(this);
+		}
+	}
 	saveSettings();
 }
 

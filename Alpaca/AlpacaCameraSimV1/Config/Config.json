@@ -1,11 +1,28 @@
 {
+    "Device_List": [
+        {
+            "Device_Name": "Alpaca Camera Simulator V1",
+            "Device_Num": 0,
+            "Device_Type": "camera"
+        },
+        {
+            "Device_Name": "Alpaca Camera Simulator V1",
+            "Device_Num": 1,
+            "Device_Type": "camera"
+        },
+        {
+            "Device_Name": "Alpaca Camera Simulator V1",
+            "Device_Num": 2,
+            "Device_Type": "camera"
+        }
+    ],
     "Server_Config": {
         "Certificate_Path": "",
         "DH_Params_Path": "",
         "Enable_HTTPS": false,
         "IPv4": "127.0.0.1",
-        "Port": 8080,
+        "Port": 8180,
         "Priv_Key_Path": "",
-        "Server_Thread_Count": 1
+        "Server_Thread_Count": 4
     }
 }

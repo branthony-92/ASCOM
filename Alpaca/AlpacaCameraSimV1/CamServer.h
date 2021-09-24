@@ -11,6 +11,7 @@ namespace CamServer {
 class CameraServer : public Server
 {
 public:
+
 	struct ServerConfigurationData
 	{
 		std::string    configFilePath;
@@ -21,6 +22,7 @@ public:
 		std::string    certificateFilePath;
 		std::string    privKeyFilePath;
 		std::string    diffieHellmanParamFilePath;
+
 	};
 
 	CameraServer()

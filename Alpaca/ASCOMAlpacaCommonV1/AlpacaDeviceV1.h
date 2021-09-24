@@ -6,26 +6,50 @@
 
 namespace Alpaca {
 
+	enum class DeviceTypeID
+	{
+		// these are essentially to be used as device ID masks 
+		// on top of the device num so long as device num is between 0-255
+		Camera              = 0x0100,
+		CoverCalibrator     = 0x0200,
+		Dome                = 0x0300,
+		FilterWheel		    = 0x0400,
+		Focuser			    = 0x0500,
+		ObservingConditions = 0x0600,
+		Rotator				= 0x0700,
+		SafetyMonitor		= 0x0800,
+		Switch				= 0x0900,
+		Telescope			= 0x0A00,
+	};
+	const std::map<DeviceTypeID, std::string> c_deviceTypeIDToStrings = {
+		{ DeviceTypeID::Camera,				 "camera" },
+		{ DeviceTypeID::CoverCalibrator,	 "covercalibrator"},
+		{ DeviceTypeID::Dome,				 "dome"},
+		{ DeviceTypeID::FilterWheel,		 "filterwheel"},
+		{ DeviceTypeID::Focuser,			 "focuser"},
+		{ DeviceTypeID::ObservingConditions, "observingconditions"},
+		{ DeviceTypeID::Rotator,			 "rotator"},
+		{ DeviceTypeID::SafetyMonitor,		 "safetymonitor" },
+		{ DeviceTypeID::Switch,				 "switch" },
+		{ DeviceTypeID::Telescope,			 "telescope" }
+	};
+
+	const std::map<std::string, DeviceTypeID> c_stringsToDeviceTypeID = {
+	{ "camera",				    DeviceTypeID::Camera              },
+	{ "coverCalibrator",	    DeviceTypeID::CoverCalibrator     },
+	{ "dome",				    DeviceTypeID::Dome                },
+	{ "filterWheel",		    DeviceTypeID::FilterWheel         },
+	{ "focuser",			    DeviceTypeID::Focuser             },
+	{ "observingconditions",    DeviceTypeID::ObservingConditions },
+	{ "rotator",			    DeviceTypeID::Rotator             },
+	{ "safetymonitor",		    DeviceTypeID::SafetyMonitor       },
+	{ "switch",				    DeviceTypeID::Switch              },
+	{ "telescope",			    DeviceTypeID::Telescope           }
+	};
+
 class AlpacaDeviceV1 : public RESTServerContext
 {
 public:
-	enum class DeviceTypeID
-	{
-		// tshee can be useful in the even that some class has ownership of multiple devices and may 
-		// want to identify by device num but a scope and a cam can both have a device num of 0 or something
-		Camera                = 0x100,
-		CoverCalibrator       = 0x200,
-		Dome  				  = 0x300,
-		FilterWheel 		  = 0x400,
-		Focuser  			  = 0x500,
-		ObservingConditions   = 0x600,
-		Rotator 			  = 0x700,
-		SafetyMonitor 		  = 0x800,
-		Switch 				  = 0x900,
-		Telescope			  = 0xA00,
-
-		NumDeviceTypes,
-	};
 	using StringList = std::vector<std::string>;
 	using IntList    = std::vector<int>;
 	// Common Alpaca Device Interface info
@@ -62,5 +86,6 @@ private:
 };
 typedef std::list<std::shared_ptr<AlpacaDeviceV1>>  DeviceList;
 
+		
 }
 #endif // !ALPACADEVICEV1_H

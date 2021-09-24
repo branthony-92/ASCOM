@@ -6,7 +6,7 @@ using namespace Alpaca;
 using namespace Alpaca::Camera;
 
 IAlpacaCamV1::IAlpacaCamV1(unsigned int deviceNum, std::string deviceName)
-	: AlpacaDeviceV1(AlpacaDeviceV1::DeviceTypeID::Camera, deviceNum, deviceName)
+	: AlpacaDeviceV1(DeviceTypeID::Camera, deviceNum, deviceName)
 	, m_bayerOffsetX(0)
 	, m_bayerOffsetY(0)
 	, m_binX(1)
