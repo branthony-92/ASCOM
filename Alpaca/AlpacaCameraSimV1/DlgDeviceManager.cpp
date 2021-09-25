@@ -53,6 +53,10 @@ DlgDeviceManager::DlgDeviceManager(DeviceManager& devManager, QWidget *parent)
 		&QPushButton::clicked, this,
 		&DlgDeviceManager::onRemoveDevice);
 
+	connect(ui->OkButton,
+		&QPushButton::clicked, this,
+		&QDialog::close);
+
 }
 
 DlgDeviceManager::~DlgDeviceManager()
