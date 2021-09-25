@@ -3,7 +3,7 @@
 #include <qsettings.h>
 #include <qfiledialog.h>
 
-DlgServerSetup::DlgServerSetup(CamServer::CameraServer::ServerConfigurationData config, QWidget* parent)
+DlgServerSetup::DlgServerSetup(DevServer::DeviceServer::ServerConfigurationData config, QWidget* parent)
 	: QDialog(parent)
 	, m_configData(config)
 	, m_windowPosX(0)

@@ -10,7 +10,10 @@
 
 #include "CameraV1.h"
 #include "CamServer.h"
+#include "DeviceManager.h"
 #include "DeviceView.h"
+
+
 namespace Gui {
 
 class DlgMainFrame 
@@ -20,15 +23,16 @@ class DlgMainFrame
 	Q_OBJECT
 
 	// UI properties
-	DEVICEPROP(CamServer::CameraServer::ServerConfigurationData, ConfigData, configData)
+	DEVICEPROP(DevServer::DeviceServer::ServerConfigurationData, ConfigData, configData)
 	DEVICEPROP(QString, CertPathHistory,             certPathHistory)
 	DEVICEPROP(QString, PrivKeyPathHistory,          privKeyPathHistory)
 	DEVICEPROP(QString, EncryptionParamsPathHistory, encryptionParamsPathHistory)
 	DEVICEPROP(QString, StatusString,				 statusString)
-	DEVICEPROP(CamServer::CamServerPtr, CamServer, pCamServer)
+	DEVICEPROP(DevServer::DeviceServerPtr, DevServer, pDevServer)
+	DEVICEPROP(DeviceManagerPtr,        pDeviceManager, pDeviceManager)
 
 public:
-	DlgMainFrame(CamServer::CamServerPtr pServer, QWidget *parent = Q_NULLPTR);
+	DlgMainFrame(DeviceManagerPtr pDevManager, DevServer::DeviceServerPtr pServer, QWidget *parent = Q_NULLPTR);
 	~DlgMainFrame();
 
 	void update(const Hint::HintBase&) override;
@@ -63,6 +67,8 @@ public slots:
 
 	void onActionFile_Close();
 	void onActionServer_Settings();
+
+	void onActionDevice_ManagerDevices();
 
 	void onUpdateCamStatus(unsigned int name, QString msg);
 	void onUpdateServerStatus(QString msg);

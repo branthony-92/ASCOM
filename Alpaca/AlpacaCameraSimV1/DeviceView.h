@@ -44,7 +44,7 @@ namespace View {
 		bool m_allowUpdates;
 	public:
 		DeviceView(bool allowUpdates = true) 
-			: m_viewID(0) 
+			: m_viewID(UINT32_MAX) 
 			, m_allowUpdates(allowUpdates)
 		{}
 

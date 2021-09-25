@@ -3,9 +3,9 @@
 #include <fstream>
 #include <iomanip>
 
-using namespace CamServer;
+using namespace DevServer;
 
-bool CameraServer::start(ServerConfigurationData& info)
+bool DeviceServer::start(ServerConfigurationData& info)
 {
 	if (m_serverContexts.empty())
 	{
@@ -89,13 +89,13 @@ bool CameraServer::start(ServerConfigurationData& info)
 	return true;
 }
 
-bool CameraServer::stop()
+bool DeviceServer::stop()
 {
 	reset();
 	return true;
 }
 
-void CamServer::CameraServer::saveConfigToFile(ServerConfig& config)
+void DevServer::DeviceServer::saveConfigToFile(ServerConfig& config)
 {
 	// try to load the file if one exists
 	JSON cfgJSON = jsonUtils::loadFile(c_workingConfigPath);

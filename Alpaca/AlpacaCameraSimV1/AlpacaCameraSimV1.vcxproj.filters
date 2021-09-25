@@ -78,6 +78,12 @@
     <ClCompile Include="DeviceView.cpp">
       <Filter>Source Files\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="DeviceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgDeviceManager.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -107,6 +113,9 @@
     <ClInclude Include="DeviceView.h">
       <Filter>Header Files\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="DeviceManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="DlgMainFrame.ui">
@@ -115,12 +124,18 @@
     <QtUic Include="DlgServerSetup.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="DlgDeviceManager.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="DlgMainFrame.h">
       <Filter>Header Files\GUI</Filter>
     </QtMoc>
     <QtMoc Include="DlgServerSetup.h">
+      <Filter>Header Files\GUI</Filter>
+    </QtMoc>
+    <QtMoc Include="DlgDeviceManager.h">
       <Filter>Header Files\GUI</Filter>
     </QtMoc>
   </ItemGroup>

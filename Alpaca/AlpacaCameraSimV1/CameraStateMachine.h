@@ -17,18 +17,17 @@ namespace SM {
 	};
 	typedef std::shared_ptr<DeviceSMManager> DeviceSMManagerPtr;
 
-class CameraStateMachine : public CSMBase
+class DeviceStateMachine : public CSMBase
 {
 
-	DEVICEPROP(Camera::CamPtr, Camera, pCamera)
 public:
-	CameraStateMachine(std::shared_ptr<Camera::CameraV1> pCam, std::string name);
-	virtual ~CameraStateMachine();
+	DeviceStateMachine(TSMContextPtr pDev, std::string name);
+	virtual ~DeviceStateMachine();
 
 	void initSM() override;
 };
 
-typedef std::shared_ptr<CameraStateMachine> CameraSMPtr;
+typedef std::shared_ptr<DeviceStateMachine> DeviceStateMachinePtr;
 
 }
 #endif // !CAMERASM_H

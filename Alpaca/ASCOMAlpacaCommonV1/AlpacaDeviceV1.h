@@ -85,6 +85,7 @@ private:
 	void initCommonEndpoints();
 };
 typedef std::list<std::shared_ptr<AlpacaDeviceV1>>  DeviceList;
+typedef std::shared_ptr<AlpacaDeviceV1> AlpacaDevicePtr;
 
 		
 }

@@ -4,11 +4,11 @@
 #include "RESTServer.h"
 #include "CameraV1.h"
 
-namespace CamServer {
+namespace DevServer {
 
 	const std::string c_workingConfigPath = "Config/Config.json";
 
-class CameraServer : public Server
+class DeviceServer : public Server
 {
 public:
 
@@ -25,12 +25,12 @@ public:
 
 	};
 
-	CameraServer()
+	DeviceServer()
 		: Server()
 		, m_configData()
 		, m_lastError()
 	{}
-	virtual ~CameraServer() {}
+	virtual ~DeviceServer() {}
 
 	bool start(ServerConfigurationData& info);
 	bool stop();
@@ -43,8 +43,8 @@ private:
 	DEVICEPROP(ServerConfigurationData, ConfigData, configData)
 	DEVICEPROP(std::string,             LastError,   lastError)
 };
-typedef std::shared_ptr<CameraServer> CamServerPtr;
+typedef std::shared_ptr<DeviceServer> DeviceServerPtr;
 }
-using ServerConfig = CamServer::CameraServer::ServerConfigurationData;
+using ServerConfig = DevServer::DeviceServer::ServerConfigurationData;
 
 #endif // !CAMSERVER_H

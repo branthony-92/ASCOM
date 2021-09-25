@@ -7,17 +7,16 @@ using namespace SM;
 using namespace Camera;
 using namespace States;
 
-CameraStateMachine::CameraStateMachine(std::shared_ptr<CameraV1> pCam, std::string name)
-	: CSMBase(0, name, pCam)
-	, m_pCamera(pCam)
+DeviceStateMachine::DeviceStateMachine(TSMContextPtr pDev, std::string name)
+	: CSMBase(0, name, pDev)
 {
 }
 
-CameraStateMachine::~CameraStateMachine()
+DeviceStateMachine::~DeviceStateMachine()
 {
 }
 
-void SM::CameraStateMachine::initSM()
+void SM::DeviceStateMachine::initSM()
 {
 	auto stateFirst = static_cast<unsigned int>(CameraState::StateID::CamState_FirstState);
 	auto stateLast  = static_cast<unsigned int>(CameraState::StateID::NumBaseStates);

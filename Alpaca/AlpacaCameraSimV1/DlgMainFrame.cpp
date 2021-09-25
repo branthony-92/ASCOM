@@ -2,6 +2,7 @@
 #include "DlgMainFrame.h"
 
 #include "DlgServerSetup.h"
+#include "DlgDeviceManager.h"
 
 #include <qfiledialog.h>
 #include <qmessagebox.h>
@@ -9,11 +10,12 @@
 #include <qaction>
 
 using namespace Gui;
-using namespace CamServer;
+using namespace DevServer;
 
-DlgMainFrame::DlgMainFrame(CamServerPtr pServer, QWidget *parent)
+DlgMainFrame::DlgMainFrame(DeviceManagerPtr pDevManager, DeviceServerPtr pServer, QWidget *parent)
 	: QMainWindow(parent)
-	, m_pCamServer(pServer)
+	, m_pDevServer(pServer)
+	, m_pDeviceManager(pDevManager)
 	, m_certPathHistory("")
 	, m_privKeyPathHistory("")
 	, m_encryptionParamsPathHistory("")
@@ -48,7 +50,7 @@ DlgMainFrame::DlgMainFrame(CamServerPtr pServer, QWidget *parent)
 
 DlgMainFrame::~DlgMainFrame()
 {
-	for (auto& pCtx : m_pCamServer->getContexts())
+	for (auto& pCtx : m_pDevServer->getContexts())
 	{
 		auto pModel = std::dynamic_pointer_cast<Model::DeviceModel>(pCtx);
 		if (pModel)
@@ -103,6 +105,7 @@ void DlgMainFrame::enableButtonControls(bool enabled)
 	ui.StopServerButton->setEnabled(!enabled);
 
 	ui.actionSettings->setEnabled(enabled);
+	ui.actionManage_Devices->setEnabled(enabled);
 }
 
 void DlgMainFrame::initSlots()
@@ -114,6 +117,10 @@ void DlgMainFrame::initSlots()
 	connect(ui.actionSettings,
 		&QAction::triggered,this, 
 		&DlgMainFrame::onActionServer_Settings);
+
+	connect(ui.actionManage_Devices,
+		&QAction::triggered, this,
+		&DlgMainFrame::onActionDevice_ManagerDevices);
 
 	connect(ui.StartServerButton,
 		&QPushButton::clicked, this,
@@ -185,9 +192,9 @@ void DlgMainFrame::onStartServer()
 {
 	updateValues();
 
-	if (!m_pCamServer->start(m_configData))
+	if (!m_pDevServer->start(m_configData))
 	{
-		auto errMsg = m_pCamServer->getLastError();
+		auto errMsg = m_pDevServer->getLastError();
 		QMessageBox msgBox;
 		msgBox.setText("Could Not Start Camera Server: " + QString::fromStdString(errMsg));
 		msgBox.exec();
@@ -207,7 +214,7 @@ void DlgMainFrame::onStartServer()
 
 void DlgMainFrame::onStopServer()
 {
-	m_pCamServer->stop();
+	m_pDevServer->stop();
 	onUpdateServerStatus("Camera Server Not Listening");
 	enableButtonControls(true);
 }
@@ -239,11 +246,16 @@ void Gui::DlgMainFrame::onUpdateDeviceRegistered(unsigned int id, QString name)
 		deviceStatus.pLabel = std::make_shared<QLabel>(this);
 		deviceStatus.pEdit  = std::make_shared<QTextEdit>(this);
 
+
 		// add it to the map 
 		m_deviceStatusMap.insert_or_assign(id, deviceStatus);
 
 		ui.DeviceStatus->layout()->addWidget(deviceStatus.pLabel.get());
 		ui.DeviceStatus->layout()->addWidget(deviceStatus.pEdit.get());
+
+		deviceStatus.pEdit->setMinimumHeight(35);
+		deviceStatus.pEdit->setMaximumHeight(35);
+		deviceStatus.pEdit->setMinimumWidth(150);
 
 		auto prettyName = name.replace('_', ' ');
 		deviceStatus.pLabel->setText(prettyName);
@@ -267,6 +279,35 @@ void DlgMainFrame::onActionServer_Settings()
 	if (ret)
 	{
 		m_configData = dlg.getConfigData();
+	}
+}
+
+void Gui::DlgMainFrame::onActionDevice_ManagerDevices()
+{
+	DlgDeviceManager dlg(*m_pDeviceManager, this);
+	dlg.setModal(true);
+	dlg.exec();
+	for (auto& dev : m_deviceStatusMap)
+	{
+		dev.second.pEdit->hide();
+		dev.second.pLabel->hide();
+
+		dev.second.pEdit->close();
+		dev.second.pLabel->close();
+	}
+	m_deviceStatusMap.clear();
+	for (auto& pCtx : m_pDevServer->getContexts())
+	{
+		auto pModel = std::dynamic_pointer_cast<Model::DeviceModel>(pCtx);
+		if (pModel)
+		{
+			pModel->registerView(this);
+
+			auto pDevice = std::dynamic_pointer_cast<Alpaca::AlpacaDeviceV1>(pCtx);
+			if (!pDevice) continue;
+
+			onUpdateDeviceRegistered(pDevice->getDeviceID(), QString::fromStdString(pDevice->getName()));
+		}
 	}
 }
 

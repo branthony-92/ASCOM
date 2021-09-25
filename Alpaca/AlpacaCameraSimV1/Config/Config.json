@@ -1,18 +1,23 @@
 {
     "Device_List": [
         {
-            "Device_Name": "Alpaca Camera Simulator V1",
+            "Device_Name": "Cam 1",
             "Device_Num": 0,
             "Device_Type": "camera"
         },
         {
-            "Device_Name": "Alpaca Camera Simulator V1",
+            "Device_Name": "Cam 2",
             "Device_Num": 1,
             "Device_Type": "camera"
         },
         {
-            "Device_Name": "Alpaca Camera Simulator V1",
+            "Device_Name": "Cam 3",
             "Device_Num": 2,
+            "Device_Type": "camera"
+        },
+        {
+            "Device_Name": "Cam 4",
+            "Device_Num": 3,
             "Device_Type": "camera"
         }
     ],

@@ -12,17 +12,17 @@ void Camera::States::CameraState::addTransition(Event::EventID eventID, StateID 
 	CSMState::addTransition(static_cast<uint32_t>(eventID), static_cast<uint32_t>(targetStateID));
 }
 
-bool Camera::States::CameraState_Unknown::enterState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_Unknown::enterState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	return true;
 }
 
-bool Camera::States::CameraState_Unknown::ticState(TContextPtr pCtx)
+bool Camera::States::CameraState_Unknown::ticState(TSMContextPtr pCtx)
 {
 	return true;
 }
 
-bool Camera::States::CameraState_Unknown::exitState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_Unknown::exitState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	return true;
 }
@@ -31,21 +31,21 @@ void Camera::States::CameraState_Unknown::initTransitionTable()
 {
 }
 
-bool Camera::States::CameraState_NotConnected::enterState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_NotConnected::enterState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	auto pCam = std::dynamic_pointer_cast<Camera::CameraV1>(pCtx);
 
 	return true;
 }
 
-bool Camera::States::CameraState_NotConnected::ticState(TContextPtr pCtx)
+bool Camera::States::CameraState_NotConnected::ticState(TSMContextPtr pCtx)
 {
 	auto pCam = std::dynamic_pointer_cast<Camera::CameraV1>(pCtx);
 	pCam->onStart();
 	return true;
 }
 
-bool Camera::States::CameraState_NotConnected::exitState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_NotConnected::exitState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	return true;
 }
@@ -57,7 +57,7 @@ void Camera::States::CameraState_NotConnected::initTransitionTable()
 	addTransition(EventID::CamEvent_Unknown, States::CameraState::StateID::CamState_Unknown);
 }
 
-bool Camera::States::CameraState_Connecting::enterState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_Connecting::enterState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	auto pCam = std::dynamic_pointer_cast<Camera::CameraV1>(pCtx);
 
@@ -66,12 +66,12 @@ bool Camera::States::CameraState_Connecting::enterState(TContextPtr pCtx, TEvent
 	return true;
 }
 
-bool Camera::States::CameraState_Connecting::ticState(TContextPtr pCtx)
+bool Camera::States::CameraState_Connecting::ticState(TSMContextPtr pCtx)
 {
 	return true;
 }
 
-bool Camera::States::CameraState_Connecting::exitState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_Connecting::exitState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	return true;
 }
@@ -83,20 +83,20 @@ void Camera::States::CameraState_Connecting::initTransitionTable()
 	addTransition(EventID::CamEvent_Unknown, States::CameraState::StateID::CamState_Unknown);
 }
 
-bool Camera::States::CameraState_Idle::enterState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_Idle::enterState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	auto pCam = std::dynamic_pointer_cast<Camera::CameraV1>(pCtx);
 	return true;
 }
 
-bool Camera::States::CameraState_Idle::ticState(TContextPtr pCtx)
+bool Camera::States::CameraState_Idle::ticState(TSMContextPtr pCtx)
 {
 	auto pCam = std::dynamic_pointer_cast<Camera::CameraV1>(pCtx);
 	pCam->onIdle();
 	return true;
 }
 
-bool Camera::States::CameraState_Idle::exitState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_Idle::exitState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	return true;
 }
@@ -110,7 +110,7 @@ void Camera::States::CameraState_Idle::initTransitionTable()
 	addTransition(EventID::CamEvent_Unknown,	    States::CameraState::StateID::CamState_Unknown);
 }
 
-bool Camera::States::CameraState_Exposing::enterState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_Exposing::enterState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	auto pCam  = std::dynamic_pointer_cast<Camera::CameraV1>(pCtx);
 	m_pContext = std::make_shared<Camera::ExposureManager>(pCam);
@@ -148,7 +148,7 @@ bool Camera::States::CameraState_Exposing::enterState(TContextPtr pCtx, TEventPt
 	return true;
 }
 
-bool Camera::States::CameraState_Exposing::ticState(TContextPtr pCtx)
+bool Camera::States::CameraState_Exposing::ticState(TSMContextPtr pCtx)
 {
 	auto pCam = std::dynamic_pointer_cast<Camera::CameraV1>(pCtx);
 	onTic();
@@ -160,7 +160,7 @@ bool Camera::States::CameraState_Exposing::ticState(TContextPtr pCtx)
 	return true;
 }
 
-bool Camera::States::CameraState_Exposing::exitState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_Exposing::exitState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	return true;
 }
@@ -174,7 +174,7 @@ void Camera::States::CameraState_Exposing::initTransitionTable()
 }
 
 
-bool Camera::States::CameraState_Transferring::enterState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_Transferring::enterState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	auto pCam = std::dynamic_pointer_cast<Camera::CameraV1>(pCtx);
 	if (!pCam)
@@ -184,7 +184,7 @@ bool Camera::States::CameraState_Transferring::enterState(TContextPtr pCtx, TEve
 	return true;
 }
 
-bool Camera::States::CameraState_Transferring::ticState(TContextPtr pCtx)
+bool Camera::States::CameraState_Transferring::ticState(TSMContextPtr pCtx)
 {
 	auto pCam = std::dynamic_pointer_cast<Camera::CameraV1>(pCtx);
 	if (!pCam)
@@ -196,7 +196,7 @@ bool Camera::States::CameraState_Transferring::ticState(TContextPtr pCtx)
 	return true;
 }
 
-bool Camera::States::CameraState_Transferring::exitState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_Transferring::exitState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	auto pCam = std::dynamic_pointer_cast<Camera::CameraV1>(pCtx);
 	if (!pCam)
@@ -215,7 +215,7 @@ void Camera::States::CameraState_Transferring::initTransitionTable()
 	addTransition(EventID::CamEvent_Unknown, States::CameraState::StateID::CamState_Unknown);
 }
 
-bool Camera::States::CameraState_Error::enterState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_Error::enterState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	auto pCam = std::dynamic_pointer_cast<Camera::CameraV1>(pCtx);
 	pCam->setCameraState(Alpaca::Camera::CameraStateID::CameraError);
@@ -223,12 +223,12 @@ bool Camera::States::CameraState_Error::enterState(TContextPtr pCtx, TEventPtr p
 	return true;
 }
 
-bool Camera::States::CameraState_Error::ticState(TContextPtr pCtx)
+bool Camera::States::CameraState_Error::ticState(TSMContextPtr pCtx)
 {
 	return true;
 }
 
-bool Camera::States::CameraState_Error::exitState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_Error::exitState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	return true;
 }
@@ -240,7 +240,7 @@ void Camera::States::CameraState_Error::initTransitionTable()
 	addTransition(EventID::CamEvent_Unknown, States::CameraState::StateID::CamState_Unknown);
 }
 
-bool Camera::States::CameraState_Exposing_GeneratingBackground::enterState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_Exposing_GeneratingBackground::enterState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	auto pExpContext = std::dynamic_pointer_cast<Camera::ExposureManager>(pCtx);
 	if (!pExpContext)
@@ -251,7 +251,7 @@ bool Camera::States::CameraState_Exposing_GeneratingBackground::enterState(TCont
 	return true;
 }
 
-bool Camera::States::CameraState_Exposing_GeneratingBackground::ticState(TContextPtr pCtx)
+bool Camera::States::CameraState_Exposing_GeneratingBackground::ticState(TSMContextPtr pCtx)
 {
 	auto pExpContext = std::dynamic_pointer_cast<Camera::ExposureManager>(pCtx);
 	if (!pExpContext)
@@ -262,7 +262,7 @@ bool Camera::States::CameraState_Exposing_GeneratingBackground::ticState(TContex
 	return true;
 }
 
-bool Camera::States::CameraState_Exposing_GeneratingBackground::exitState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_Exposing_GeneratingBackground::exitState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	auto pExpContext = std::dynamic_pointer_cast<Camera::ExposureManager>(pCtx);
 	if (!pExpContext)
@@ -279,7 +279,7 @@ void Camera::States::CameraState_Exposing_GeneratingBackground::initTransitionTa
 	addTransition(EventID::CamEvent_Unknown, States::CameraState::StateID::CamState_Unknown);
 }
 
-bool Camera::States::CameraState_Exposing_GeneratingImage::enterState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_Exposing_GeneratingImage::enterState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	auto pExpContext = std::dynamic_pointer_cast<Camera::ExposureManager>(pCtx);
 	if (!pExpContext)
@@ -291,7 +291,7 @@ bool Camera::States::CameraState_Exposing_GeneratingImage::enterState(TContextPt
 	return true;
 }
 
-bool Camera::States::CameraState_Exposing_GeneratingImage::ticState(TContextPtr pCtx)
+bool Camera::States::CameraState_Exposing_GeneratingImage::ticState(TSMContextPtr pCtx)
 {
 	auto pExpContext = std::dynamic_pointer_cast<Camera::ExposureManager>(pCtx);
 	if (!pExpContext)
@@ -301,7 +301,7 @@ bool Camera::States::CameraState_Exposing_GeneratingImage::ticState(TContextPtr 
 	return true;
 }
 
-bool Camera::States::CameraState_Exposing_GeneratingImage::exitState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_Exposing_GeneratingImage::exitState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	auto pExpContext = std::dynamic_pointer_cast<Camera::ExposureManager>(pCtx);
 	if (!pExpContext)
@@ -320,17 +320,17 @@ void Camera::States::CameraState_Exposing_GeneratingImage::initTransitionTable()
 
 
 
-bool Camera::States::CameraState_Exposing_Stopped::enterState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_Exposing_Stopped::enterState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	return true;
 }
 
-bool Camera::States::CameraState_Exposing_Stopped::ticState(TContextPtr pCtx)
+bool Camera::States::CameraState_Exposing_Stopped::ticState(TSMContextPtr pCtx)
 {
 	return true;
 }
 
-bool Camera::States::CameraState_Exposing_Stopped::exitState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_Exposing_Stopped::exitState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	return true;
 }
@@ -341,17 +341,17 @@ void Camera::States::CameraState_Exposing_Stopped::initTransitionTable()
 	addTransition(EventID::CamEvent_Unknown, States::CameraState::StateID::CamState_Unknown);
 }
 
-bool Camera::States::CameraState_PulseGuiding::enterState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_PulseGuiding::enterState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	return true;;
 }
 
-bool Camera::States::CameraState_PulseGuiding::ticState(TContextPtr pCtx)
+bool Camera::States::CameraState_PulseGuiding::ticState(TSMContextPtr pCtx)
 {
 	return true;;
 }
 
-bool Camera::States::CameraState_PulseGuiding::exitState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_PulseGuiding::exitState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	return true;;
 }
@@ -363,7 +363,7 @@ void Camera::States::CameraState_PulseGuiding::initTransitionTable()
 	addTransition(EventID::CamEvent_Unknown, States::CameraState::StateID::CamState_Disconnecting);
 }
 
-bool Camera::States::CameraState_Disconnecting::enterState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_Disconnecting::enterState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	auto pCam = std::dynamic_pointer_cast<Camera::CameraV1>(pCtx);
 
@@ -371,12 +371,12 @@ bool Camera::States::CameraState_Disconnecting::enterState(TContextPtr pCtx, TEv
 	return true;
 }
 
-bool Camera::States::CameraState_Disconnecting::ticState(TContextPtr pCtx)
+bool Camera::States::CameraState_Disconnecting::ticState(TSMContextPtr pCtx)
 {
 	return true;;
 }
 
-bool Camera::States::CameraState_Disconnecting::exitState(TContextPtr pCtx, TEventPtr pEvent)
+bool Camera::States::CameraState_Disconnecting::exitState(TSMContextPtr pCtx, TEventPtr pEvent)
 {
 	return true;;
 }

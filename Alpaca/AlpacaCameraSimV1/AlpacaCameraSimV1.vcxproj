@@ -122,8 +122,10 @@
     <ClCompile Include="CameraV1.cpp" />
     <ClCompile Include="CamEvents.cpp" />
     <ClCompile Include="CamServer.cpp" />
+    <ClCompile Include="DeviceManager.cpp" />
     <ClCompile Include="DeviceModel.cpp" />
     <ClCompile Include="DeviceView.cpp" />
+    <ClCompile Include="DlgDeviceManager.cpp" />
     <ClCompile Include="DlgMainFrame.cpp" />
     <ClCompile Include="DlgServerSetup.cpp" />
     <ClCompile Include="main.cpp" />
@@ -137,11 +139,14 @@
     <QtMoc Include="DlgMainFrame.h" />
     <ClInclude Include="CamServer.h" />
     <QtMoc Include="DlgServerSetup.h" />
+    <ClInclude Include="DeviceManager.h" />
     <ClInclude Include="DeviceModel.h" />
     <ClInclude Include="DeviceView.h" />
+    <QtMoc Include="DlgDeviceManager.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtUic Include="DlgDeviceManager.ui" />
     <QtUic Include="DlgMainFrame.ui" />
     <QtUic Include="DlgServerSetup.ui" />
   </ItemGroup>

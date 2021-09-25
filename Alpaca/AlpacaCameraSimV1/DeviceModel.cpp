@@ -4,6 +4,7 @@
 
 void Model::DeviceModel::registerView(View::DeviceView* pView)
 {
+	if (m_views.find(pView->getID()) != m_views.end()) return; // view already registered to this model
 	auto view = m_views.find(m_nextViewID);
 	if (view != m_views.end())
 	{
@@ -11,7 +12,8 @@ void Model::DeviceModel::registerView(View::DeviceView* pView)
 		{
 			m_nextViewID++;
 			view = m_views.find(m_nextViewID);
-		} 		while (view != m_views.end());
+		} 		
+		while (view != m_views.end());
 	}
 	pView->setID(m_nextViewID);
 	m_views.insert_or_assign(m_nextViewID++, pView);

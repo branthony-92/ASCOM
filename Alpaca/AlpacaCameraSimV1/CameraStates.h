@@ -57,9 +57,9 @@ namespace States {
 			: CameraState(CameraState::StateID::CamState_Unknown, "CamState_Unknown")
 		{}
 
-		virtual bool enterState(TContextPtr pCtx, TEventPtr pEvent) override;
-		virtual bool ticState(TContextPtr pCtx) override;
-		virtual bool exitState(TContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool enterState(TSMContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool ticState(TSMContextPtr pCtx) override;
+		virtual bool exitState(TSMContextPtr pCtx, TEventPtr pEvent) override;
 
 		virtual void initTransitionTable() override;
 	};
@@ -72,9 +72,9 @@ namespace States {
 			: CameraState(CameraState::StateID::CamState_NotConnected, "CamState_NotConnected")
 		{}
 
-		virtual bool enterState(TContextPtr pCtx, TEventPtr pEvent) override;
-		virtual bool ticState(TContextPtr pCtx) override;
-		virtual bool exitState(TContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool enterState(TSMContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool ticState(TSMContextPtr pCtx) override;
+		virtual bool exitState(TSMContextPtr pCtx, TEventPtr pEvent) override;
 
 		virtual void initTransitionTable() override;
 	};
@@ -87,9 +87,9 @@ namespace States {
 			: CameraState(CameraState::StateID::CamState_Connecting, "CamState_Connecting")
 		{}
 
-		virtual bool enterState(TContextPtr pCtx, TEventPtr pEvent) override;
-		virtual bool ticState(TContextPtr pCtx) override;
-		virtual bool exitState(TContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool enterState(TSMContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool ticState(TSMContextPtr pCtx) override;
+		virtual bool exitState(TSMContextPtr pCtx, TEventPtr pEvent) override;
 
 		virtual void initTransitionTable() override;
 	};
@@ -102,9 +102,9 @@ namespace States {
 			: CameraState(CameraState::StateID::CamState_Idle, "CamState_Idle")
 		{}
 
-		virtual bool enterState(TContextPtr pCtx, TEventPtr pEvent) override;
-		virtual bool ticState(TContextPtr pCtx) override;
-		virtual bool exitState(TContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool enterState(TSMContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool ticState(TSMContextPtr pCtx) override;
+		virtual bool exitState(TSMContextPtr pCtx, TEventPtr pEvent) override;
 
 		virtual void initTransitionTable() override;
 	};
@@ -117,9 +117,9 @@ namespace States {
 			: CameraState(CameraState::StateID::CamState_Exposing, "CamState_Exposing")
 		{}
 
-		virtual bool enterState(TContextPtr pCtx, TEventPtr pEvent) override;
-		virtual bool ticState(TContextPtr pCtx) override;
-		virtual bool exitState(TContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool enterState(TSMContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool ticState(TSMContextPtr pCtx) override;
+		virtual bool exitState(TSMContextPtr pCtx, TEventPtr pEvent) override;
 
 		virtual void initTransitionTable() override;
 	};
@@ -132,9 +132,9 @@ namespace States {
 			: CameraState(CameraState::StateID::CamState_Transferring, "CamState_Exposing_Transferring")
 		{}
 
-		virtual bool enterState(TContextPtr pCtx, TEventPtr pEvent) override;
-		virtual bool ticState(TContextPtr pCtx) override;
-		virtual bool exitState(TContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool enterState(TSMContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool ticState(TSMContextPtr pCtx) override;
+		virtual bool exitState(TSMContextPtr pCtx, TEventPtr pEvent) override;
 
 		virtual void initTransitionTable() override;
 	};
@@ -148,9 +148,9 @@ namespace States {
 			: CameraState(CameraState::StateID::CamState_PulseGuiding, "CamState_PulseGuiding")
 		{}
 
-		virtual bool enterState(TContextPtr pCtx, TEventPtr pEvent) override;
-		virtual bool ticState(TContextPtr pCtx) override;
-		virtual bool exitState(TContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool enterState(TSMContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool ticState(TSMContextPtr pCtx) override;
+		virtual bool exitState(TSMContextPtr pCtx, TEventPtr pEvent) override;
 
 		virtual void initTransitionTable() override;
 	};
@@ -163,9 +163,9 @@ namespace States {
 			: CameraState(CameraState::StateID::CamState_Disconnecting, "CamState_Disconnecting")
 		{}
 
-		virtual bool enterState(TContextPtr pCtx, TEventPtr pEvent) override;
-		virtual bool ticState(TContextPtr pCtx) override;
-		virtual bool exitState(TContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool enterState(TSMContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool ticState(TSMContextPtr pCtx) override;
+		virtual bool exitState(TSMContextPtr pCtx, TEventPtr pEvent) override;
 
 		virtual void initTransitionTable() override;
 	};
@@ -178,9 +178,9 @@ namespace States {
 			: CameraState(CameraState::StateID::CamState_Error, "CamState_Error")
 		{}
 
-		virtual bool enterState(TContextPtr pCtx, TEventPtr pEvent) override;
-		virtual bool ticState(TContextPtr pCtx) override;
-		virtual bool exitState(TContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool enterState(TSMContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool ticState(TSMContextPtr pCtx) override;
+		virtual bool exitState(TSMContextPtr pCtx, TEventPtr pEvent) override;
 
 		virtual void initTransitionTable() override;
 	};
@@ -193,9 +193,9 @@ namespace States {
 			: CameraState(CameraState::StateID::CamState_Exposing_GeneratingBackground, "CamState_Exposing_GeneratingBackground")
 		{}
 
-		virtual bool enterState(TContextPtr pCtx, TEventPtr pEvent) override;
-		virtual bool ticState(TContextPtr pCtx) override;
-		virtual bool exitState(TContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool enterState(TSMContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool ticState(TSMContextPtr pCtx) override;
+		virtual bool exitState(TSMContextPtr pCtx, TEventPtr pEvent) override;
 
 		virtual void initTransitionTable() override;
 	};
@@ -208,9 +208,9 @@ namespace States {
 			: CameraState(CameraState::StateID::CamState_Exposing_GeneratingImage, "CamState_Exposing_GeneratingImage")
 		{}
 
-		virtual bool enterState(TContextPtr pCtx, TEventPtr pEvent) override;
-		virtual bool ticState(TContextPtr pCtx) override;
-		virtual bool exitState(TContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool enterState(TSMContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool ticState(TSMContextPtr pCtx) override;
+		virtual bool exitState(TSMContextPtr pCtx, TEventPtr pEvent) override;
 
 		virtual void initTransitionTable() override;
 	};
@@ -223,9 +223,9 @@ namespace States {
 			: CameraState(CameraState::StateID::CamState_Exposing_Stopped, "CamState_Exposing_Stopped")
 		{}
 
-		virtual bool enterState(TContextPtr pCtx, TEventPtr pEvent) override;
-		virtual bool ticState(TContextPtr pCtx) override;
-		virtual bool exitState(TContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool enterState(TSMContextPtr pCtx, TEventPtr pEvent) override;
+		virtual bool ticState(TSMContextPtr pCtx) override;
+		virtual bool exitState(TSMContextPtr pCtx, TEventPtr pEvent) override;
 
 		virtual void initTransitionTable() override;
 	};

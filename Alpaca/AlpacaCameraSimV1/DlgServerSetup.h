@@ -10,10 +10,10 @@ class DlgServerSetup : public QDialog
 	Q_OBJECT
 
 public:
-	DlgServerSetup(CamServer::CameraServer::ServerConfigurationData config, QWidget *parent = Q_NULLPTR);
+	DlgServerSetup(DevServer::DeviceServer::ServerConfigurationData config, QWidget *parent = Q_NULLPTR);
 	~DlgServerSetup();
 
-	DEVICEPROP(CamServer::CameraServer::ServerConfigurationData, ConfigData, configData)
+	DEVICEPROP(DevServer::DeviceServer::ServerConfigurationData, ConfigData, configData)
 	DEVICEPROP(QString, CertPathHistory, certPathHistory)
 	DEVICEPROP(QString, PrivKeyPathHistory, privKeyPathHistory)
 	DEVICEPROP(QString, EncryptionParamsPathHistory, encryptionParamsPathHistory)

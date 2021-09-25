@@ -19,6 +19,12 @@
     <Filter Include="Source Files\Camera">
       <UniqueIdentifier>{9de8047c-fc87-48dd-b4c9-bf47f07c324b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Telescope">
+      <UniqueIdentifier>{ca974025-c666-41a3-9839-7f87b7f764be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Telescope">
+      <UniqueIdentifier>{50b017af-5452-475f-8d4c-a00c2ab2b6ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlpacaDeviceV1.h">
